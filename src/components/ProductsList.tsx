@@ -1,8 +1,9 @@
+/** @jsxImportSource @emotion/react */
 import { useState, useEffect } from "react";
 import { client } from "../utils/api-client";
 import { ProductItems } from "../utils/types";
 
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import { ProductCard } from "./ProductCard";
 
 function ProductsList() {
   const [status, setStatus] = useState("idle");
@@ -16,43 +17,22 @@ function ProductsList() {
       setStatus("success");
     });
   }, []);
+  console.log("sef");
 
   return (
-    <div>
-      {isLoading ? (
-        <h2>Loading</h2>
-      ) : isSuccess && data ? (
-        data.products.map((product, id) => (
-          <Card
-            key={product.id}
-            shadow="sm"
-            padding="lg"
-            radius="md"
-            withBorder
-          >
-            <Card.Section>
-              <Image src={product.thumbnail} height={160} alt={product.title} />
-            </Card.Section>
-
-            <Group position="apart" mt="md" mb="xs">
-              <Text weight={500}>{product.title}</Text>
-              <Badge color="pink" variant="light">
-                On Sale
-              </Badge>
-            </Group>
-
-            <Text size="sm" color="dimmed">
-              {product.description}
-            </Text>
-
-            <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-              Book classic tour now
-            </Button>
-          </Card>
-        ))
-      ) : (
-        <h2>Fuck</h2>
-      )}
+    <div
+      css={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        rowGap: 40,
+        columnGap: 20,
+      }}
+    >
+      {isLoading && <h2>Loading...</h2>}
+      {isSuccess &&
+        data?.products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
     </div>
   );
 }

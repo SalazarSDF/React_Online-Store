@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { Main } from "./screens/Main";
 import { Header } from "./screens/Header";
 
-
 function App() {
   return (
     <Routes>

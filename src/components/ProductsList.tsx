@@ -1,24 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useEffect } from "react";
-import { client } from "../utils/api-client";
-import { ProductItems } from "../utils/types";
+import { useContext } from "react";
+import { ProductsContext } from "../context/products-contex";
 
 import { ProductCard } from "./ProductCard";
 
 function ProductsList() {
-  const [status, setStatus] = useState("idle");
-  const [data, setData] = useState<ProductItems>();
-  const isLoading = status === "loading";
-  const isSuccess = status === "success";
-  useEffect(() => {
-    setStatus("loading");
-    client(`products`).then((responseData) => {
-      setData(responseData);
-      setStatus("success");
-    });
-  }, []);
+  const { data, isLoading, isSuccess } = useContext(ProductsContext);
   console.log("sef");
-
   return (
     <div
       css={{

@@ -16,11 +16,13 @@ function ProductsList() {
         columnGap: 20,
       }}
     >
-      {isLoading && <h2>Loading...</h2>}
-      {isSuccess &&
+      {isSuccess ? (
         data?.products.map((product) => (
           <ProductCard key={product.id} product={product} />
-        ))}
+        ))
+      ) : (
+        <h2>Loading...</h2>
+      )}
     </div>
   );
 }

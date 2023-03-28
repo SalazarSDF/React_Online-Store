@@ -7,12 +7,12 @@ async function client(endpoint: string) {
   };
 
   return window
-    .fetch(`${apiURL}/${endpoint}`, config)
+    .fetch(`${apiURL}/${endpoint}?limit=0`, config)
     .then(async (response) => {
       if (response.status === 401) {
         return Promise.reject({ message: "Please re-authenticate." });
       }
-      const data:ProductItems = await response.json();
+      const data: ProductItems = await response.json();
       if (response.ok) {
         return data;
       } else {

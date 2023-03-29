@@ -1,11 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { useContext } from "react";
-import { ProductsContext } from "../context/products-contex";
+//import { useContext } from "react";
+//import { ProductsContext } from "../context/products-contex";
+import { useProductsItems } from "../utils/useProductsItems";
 
 import { ProductCard } from "./ProductCard";
 
+
 function ProductsList() {
-  const { data, isLoading, isSuccess } = useContext(ProductsContext);
+  //const { data, isLoading, isSuccess } = useContext(ProductsContext);
+  const { isSuccess, products } = useProductsItems();
   console.log("sef");
   return (
     <div
@@ -16,13 +19,10 @@ function ProductsList() {
         columnGap: 20,
       }}
     >
-      {isSuccess ? (
-        data?.products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))
-      ) : (
-        <h2>Loading...</h2>
-      )}
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+      )
     </div>
   );
 }

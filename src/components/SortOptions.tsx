@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RangeSlider } from "@mantine/core";
 import { MultiSelect } from "@mantine/core";
 import { css } from "@emotion/react";
-import { ProductsContext } from "../context/products-contex";
 import { brandsData, categoryData } from "../utils/brands-category-data";
+//import { ProductsContext } from "../context/products-contex";
 
 function FilterByStock() {
   const [rangeValue, setRangeValue] = useState<[number, number]>([20, 80]);
@@ -77,11 +77,14 @@ const categoryAndBrandCss = css({
 });
 
 function FilterByCategory() {
+  //const { run } = useContext(ProductsContext);
+  //const [categories, setCategories] = useState(categoryData);
   return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Category:</span>
       <MultiSelect
         data={categoryData}
+        //onChange={setCategories}
         placeholder="Pick category that you like"
       />
     </div>
@@ -129,4 +132,3 @@ function SortOptions() {
 }
 
 export { SortOptions };
-

@@ -1,49 +1,60 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { createContext, useEffect } from "react";
 import { client } from "../utils/api-client";
 import { useAsync } from "../utils/useAsync";
-import { ProductItems } from "../utils/types";
+import { ProductItems, ProductItem } from "../utils/types";
 
 type ProductsContextType = {
   data: null | ProductItems;
   isLoading: boolean;
   isSuccess: boolean;
-  allData: null | ProductItems;
+  run?: (promise: Promise<ProductItems>) => Promise<ProductItems>;
 };
 
 const ProductsContext = createContext<ProductsContextType>({
   data: null,
   isLoading: true,
   isSuccess: false,
-  allData: null,
 });
 ProductsContext.displayName = "ProdcutsContext";
 
+// const filterByCategory = async (category: string[], allData: ProductItems) => {
+//   if (allData && category.length === 0) {
+//     Promise.resolve({ ...allData });
+//   }
+//   const filteredProducts = allData?.products.filter((el) =>
+//     category.includes(el.category)
+//   );
+
+//   if (filteredProducts && allData && category.length > 0) {
+//     return Promise.resolve({
+//       ...allData,
+//       products: filteredProducts,
+//       total: filteredProducts.length,
+//     });
+//   } else {
+//     return Promise.reject("no productsData");
+//   }
+// };
+
+// new Promise((resolve, reject) => {
+//   resolve({ products: filteredProducts });
+//   reject
+
 function ProductsProvider({ children }: { children: React.ReactNode }) {
   const { data, isLoading, isSuccess, run } = useAsync();
-  const [allData, setAllData] = useState<null | ProductItems>(null);
-  useEffect(() => {
-    // TODO: Save state in localStorage && check it
-    run(client(`products`).then((data) => data));
-  }, [run]);
 
-  if (!data) {
-    return (
-      <ProductsContext.Provider
-        value={{ data: null, isLoading, isSuccess, allData: null }}
-      >
-        {children}
-      </ProductsContext.Provider>
-    );
-  }
+  // TODO: Save state in localStorage && check it
 
-  if (data && !allData) {
-    setAllData(data);
-    console.log("ETO  ALLDATA CHANGING ONCE!", allData);
+  if (isLoading) {
+    return <h1>Loading from useContext</h1>;
+    // <ProductsContext.Provider value={{ data, isLoading, isSuccess }}>
+    //   {children}
+    // </ProductsContext.Provider>
   }
   return (
     data && (
-      <ProductsContext.Provider value={{ data, isLoading, isSuccess, allData }}>
+      <ProductsContext.Provider value={{ data, isLoading, isSuccess, run }}>
         {children}
       </ProductsContext.Provider>
     )

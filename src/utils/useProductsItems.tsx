@@ -1,5 +1,7 @@
 import { client } from "./api-client.js";
 import { useQuery } from "@tanstack/react-query";
+import { filterProducts } from "./filters.js";
+import { TFilterOptions } from "../context/filter-contex.js";
 
 const loadingProduct = {
   title: "Loading..",
@@ -19,14 +21,39 @@ const loadingProducts = Array.from({ length: 10 }, (v, index) => ({
   ...loadingProduct,
 }));
 
-function useProductsItems() {
-  //const { data } = client(`products`).then((data: ProductItems) => data);
-  const { data, isSuccess } = useQuery({
+function useProductsItems(filterOptions: TFilterOptions) {
+  const result = useQuery({
     queryKey: ["products"],
-    queryFn: () => client("products").then((data) => data.products),
+    queryFn: () =>
+      client("products").then((data) => {
+        return filterProducts(data.products, filterOptions);
+        //return data.products;
+      }),
   });
 
-  return { products: data ?? loadingProducts, isSuccess: isSuccess };
+  return {
+    ...result,
+    products: result.data ? result.data : loadingProducts,
+  };
 }
 
 export { useProductsItems };
+
+// const filterByCategory = async (category: string[], allData: ProductItems) => {
+//   if (allData && category.length === 0) {
+//     Promise.resolve({ ...allData });
+//   }
+//   const filteredProducts = allData?.products.filter((el) =>
+//     category.includes(el.category)
+//   );
+
+//   if (filteredProducts && allData && category.length > 0) {
+//     return Promise.resolve({
+//       ...allData,
+//       products: filteredProducts,
+//       total: filteredProducts.length,
+//     });
+//   } else {
+//     return Promise.reject("no productsData");
+//   }
+// };

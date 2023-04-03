@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useReducer } from "react";
 import { RangeSlider } from "@mantine/core";
 import { MultiSelect } from "@mantine/core";
 import { css } from "@emotion/react";
 import { brandsData, categoryData } from "../utils/brands-category-data";
+import { FilterContext } from "../context/filter-contex";
 //import { ProductsContext } from "../context/products-contex";
 
 function FilterByStock() {
@@ -77,14 +78,16 @@ const categoryAndBrandCss = css({
 });
 
 function FilterByCategory() {
-  //const { run } = useContext(ProductsContext);
-  //const [categories, setCategories] = useState(categoryData);
+  const { filterOptions, setFilterOptions } = useContext(FilterContext);
+  const setCategoryFilter = (newCategories: string[]) => {
+    setFilterOptions({ ...filterOptions, category: newCategories });
+  };
   return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Category:</span>
       <MultiSelect
         data={categoryData}
-        //onChange={setCategories}
+        onChange={(newCategories) => setCategoryFilter(newCategories)}
         placeholder="Pick category that you like"
       />
     </div>
@@ -92,10 +95,18 @@ function FilterByCategory() {
 }
 
 function FilterByBrand() {
+  const { filterOptions, setFilterOptions } = useContext(FilterContext);
+  const setBrandFilter = (newBrands: string[]) => {
+    setFilterOptions({ ...filterOptions, brand: newBrands });
+  };
   return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Brand:</span>
-      <MultiSelect data={brandsData} placeholder="Pick brands that you like" />
+      <MultiSelect
+        data={brandsData}
+        onChange={(newBrands) => setBrandFilter(newBrands)}
+        placeholder="Pick brands that you like"
+      />
     </div>
   );
 }

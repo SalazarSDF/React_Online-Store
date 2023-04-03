@@ -1,16 +1,32 @@
 /** @jsxImportSource @emotion/react */
 //import { useContext } from "react";
 //import { ProductsContext } from "../context/products-contex";
+import { useContext, useEffect } from "react";
+import { FilterContext } from "../context/filter-contex";
 import { useProductsItems } from "../utils/useProductsItems";
 
+import { Loader } from "@mantine/core";
 import { ProductCard } from "./ProductCard";
 
-
 function ProductsList() {
-  //const { data, isLoading, isSuccess } = useContext(ProductsContext);
-  const { isSuccess, products } = useProductsItems();
-  console.log("sef");
-  return (
+  const { filterOptions } = useContext(FilterContext);
+  const { isSuccess, products, refetch, isFetching } = useProductsItems(filterOptions);
+  console.log("isSuccess:", isSuccess);
+  console.log("isFetching:", isFetching);
+  useEffect(() => {
+    refetch();
+  }, [filterOptions]);
+  return isFetching ? (
+    <div
+      css={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Loader />
+    </div>
+  ) : (
     <div
       css={{
         display: "grid",
@@ -22,7 +38,6 @@ function ProductsList() {
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
-      )
     </div>
   );
 }

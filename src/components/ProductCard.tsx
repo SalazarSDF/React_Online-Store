@@ -28,6 +28,7 @@ function ProductCard({ product }: { product: ProductItem }) {
       </Text>
 
       <Text weight={500}>{title}</Text>
+
       <Button
         variant={inCart ? "filled" : "outline"}
         color="blue"

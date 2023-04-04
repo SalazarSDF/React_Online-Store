@@ -10,9 +10,8 @@ import { ProductCard } from "./ProductCard";
 
 function ProductsList() {
   const { filterOptions } = useContext(FilterContext);
-  const { isSuccess, products, refetch, isFetching } = useProductsItems(filterOptions);
-  console.log("isSuccess:", isSuccess);
-  console.log("isFetching:", isFetching);
+  const { products, refetch, isFetching } = useProductsItems(filterOptions);
+
   useEffect(() => {
     refetch();
   }, [filterOptions]);

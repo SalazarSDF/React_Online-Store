@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import { Main } from "./screens/Main";
-import { Header } from "./screens/Header";
+import { Main } from "./screens/main/main";
+import { Header } from "./components/header";
 
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
       <Route path="/" element={<Header />}>
         <Route index element={<Main />} />
         <Route path="shopcart" element={<h1>SHOPACART</h1>} />
+        <Route path="product/:productId" element={<h1>JOAP</h1>} />
       </Route>
     </Routes>
   );

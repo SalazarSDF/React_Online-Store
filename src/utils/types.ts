@@ -1,4 +1,4 @@
-export type ProductItem = {
+export type TProductItem = {
   id: number;
   title: string;
   description: string;
@@ -12,9 +12,24 @@ export type ProductItem = {
   images: string[];
 };
 
-export type ProductItems = {
-  products: ProductItem[];
+export type TProductItems = {
+  products: TProductItem[];
   limit: number;
   skip: number;
   total: number;
+};
+
+
+export type TFilterContextType = {
+  filterOptions: TFilterOptions;
+  setFilterOptions:
+    | React.Dispatch<React.SetStateAction<TFilterOptions>>
+    | (() => void);
+};
+
+export type TFilterOptions = {
+  category: string[];
+  brand: string[];
+  price: [number, number];
+  stock: [number, number];
 };

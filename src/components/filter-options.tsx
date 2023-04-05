@@ -181,7 +181,7 @@ function FilterByBrand() {
 
 */
 
-function SortOptions() {
+function FilterOptions() {
   return (
     <div
       css={{
@@ -200,4 +200,4 @@ function SortOptions() {
   );
 }
 
-export { SortOptions };
+export { FilterOptions };

@@ -1,6 +1,6 @@
 //const apiURL = process.env.REACT_APP_API_URL
 const apiURL = "https://dummyjson.com";
-import { ProductItems } from "../utils/types";
+import { TProductItems } from "../utils/types";
 async function client(endpoint: string) {
   const config = {
     method: "GET",
@@ -12,7 +12,7 @@ async function client(endpoint: string) {
       if (response.status === 401) {
         return Promise.reject({ message: "Please re-authenticate." });
       }
-      const data: ProductItems = await response.json();
+      const data: TProductItems = await response.json();
       if (response.ok) {
         return data;
       } else {

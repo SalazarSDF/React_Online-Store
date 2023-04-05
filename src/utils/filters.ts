@@ -1,5 +1,5 @@
-import { ProductItem } from "./types";
-import { TFilterOptions } from "../context/filter-contex.js";
+import { TProductItem } from "./types";
+import { TFilterOptions } from "./types";
 
 // const filterByCategory = (filterOptions: string[], products: ProductItem[]) => {
 //   if (!products && filterOptions.length === 0) {
@@ -12,7 +12,7 @@ import { TFilterOptions } from "../context/filter-contex.js";
 // };
 
 async function filterProducts(
-  products: ProductItem[],
+  products: TProductItem[],
   filterOptions: TFilterOptions
 ) {
   const { category, brand, price, stock } = filterOptions;
@@ -31,12 +31,12 @@ async function filterProducts(
   }
   if (minPrice !== 0 || maxPrice !== Infinity) {
     filteredProducts = filteredProducts.filter(
-      (product) => product.price > minPrice && product.price < maxPrice
+      (product) => product.price >= minPrice && product.price <= maxPrice
     );
   }
   if (minStock !== 0 || maxStock !== Infinity) {
     filteredProducts = filteredProducts.filter(
-      (product) => product.stock > minStock && product.stock < maxStock
+      (product) => product.stock >= minStock && product.stock <= maxStock
     );
   }
   console.log(filterOptions, "eto FilterOptions");

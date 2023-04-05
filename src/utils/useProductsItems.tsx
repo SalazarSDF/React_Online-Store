@@ -1,7 +1,7 @@
 import { client } from "./api-client.js";
 import { useQuery } from "@tanstack/react-query";
 import { filterProducts } from "./filters.js";
-import { TFilterOptions } from "../context/filter-contex.js";
+import { TFilterOptions } from "./types.js";
 
 const loadingProduct = {
   title: "Loading..",

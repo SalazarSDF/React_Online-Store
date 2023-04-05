@@ -16,7 +16,7 @@ function Logo() {
   );
 }
 
-function TrashBag() {
+function ShopCart() {
   return (
     <Link
       css={{
@@ -47,7 +47,7 @@ function Header() {
         }}
       >
         <Logo />
-        <TrashBag />
+        <ShopCart />
       </nav>
       <Outlet />
     </>

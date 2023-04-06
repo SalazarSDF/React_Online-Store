@@ -1,7 +1,7 @@
 import { client } from "./api-client.js";
 import { useQuery } from "@tanstack/react-query";
 import { filterProducts } from "./filters.js";
-import { TFilterOptions } from "./types.js";
+import { TFilterOptions, TProductItems, TProductItem } from "./types.js";
 
 const loadingProduct = {
   title: "Loading..",
@@ -37,6 +37,20 @@ const loadingProducts = Array.from({ length: 10 }, (v, index) => ({
 //  };
 //}
 
+function useProductItem(query: string) {
+  const result = useQuery({
+    queryKey: ["products"],
+    queryFn: () =>
+      client<TProductItem>(`products/${query}`).then((data) => {
+        return data;
+      }),
+  });
+  return {
+    ...result,
+    product: result.data ? result.data : loadingProduct,
+  };
+}
+
 function useProductsItems(filterOptions: TFilterOptions, query?: string) {
   const serachOptions = query
     ? `products/search?q=${query}`
@@ -45,7 +59,7 @@ function useProductsItems(filterOptions: TFilterOptions, query?: string) {
   const result = useQuery({
     queryKey: ["products"],
     queryFn: () =>
-      client(serachOptions).then((data) => {
+      client<TProductItems>(serachOptions).then((data) => {
         return filterProducts(data.products, filterOptions);
         //return data.products;
       }),
@@ -57,23 +71,4 @@ function useProductsItems(filterOptions: TFilterOptions, query?: string) {
   };
 }
 
-export { useProductsItems };
-
-// const filterByCategory = async (category: string[], allData: ProductItems) => {
-//   if (allData && category.length === 0) {
-//     Promise.resolve({ ...allData });
-//   }
-//   const filteredProducts = allData?.products.filter((el) =>
-//     category.includes(el.category)
-//   );
-
-//   if (filteredProducts && allData && category.length > 0) {
-//     return Promise.resolve({
-//       ...allData,
-//       products: filteredProducts,
-//       total: filteredProducts.length,
-//     });
-//   } else {
-//     return Promise.reject("no productsData");
-//   }
-// };
+export { useProductsItems, useProductItem };

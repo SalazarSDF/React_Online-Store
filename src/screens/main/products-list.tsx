@@ -26,7 +26,7 @@ function ProductCard({ product }: { product: TProductItem }) {
   }
   return (
     <Card shadow="sm" padding="lg" radius="xs">
-      <Link to={`/product/${product.id}`}>
+      <Link css={{ textDecoration: "none" }} to={`/product/${product.id}`}>
         <Card.Section>
           <Image src={thumbnail} withPlaceholder height={160} alt={title} />
         </Card.Section>
@@ -45,18 +45,17 @@ function ProductCard({ product }: { product: TProductItem }) {
         </Text>
 
         <Text weight={500}>{title}</Text>
-
-        <Button
-          variant={inCart ? "filled" : "outline"}
-          color="blue"
-          mt="md"
-          fullWidth
-          radius="md"
-          onClick={addProductToCart}
-        >
-          {inCart ? "Remove From Cart" : "Add to Cart"}
-        </Button>
       </Link>
+      <Button
+        variant={inCart ? "filled" : "outline"}
+        color="blue"
+        mt="md"
+        fullWidth
+        radius="md"
+        onClick={addProductToCart}
+      >
+        {inCart ? "Remove From Cart" : "Add to Cart"}
+      </Button>
     </Card>
   );
 }

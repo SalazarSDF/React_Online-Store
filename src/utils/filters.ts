@@ -39,8 +39,6 @@ async function filterProducts(
       (product) => product.stock >= minStock && product.stock <= maxStock
     );
   }
-  console.log(filterOptions, "eto FilterOptions");
-  console.log(filteredProducts, "eto filtered products");
   return Promise.resolve(filteredProducts);
 }
 export { filterProducts };

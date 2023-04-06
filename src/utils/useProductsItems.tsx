@@ -21,11 +21,31 @@ const loadingProducts = Array.from({ length: 10 }, (v, index) => ({
   ...loadingProduct,
 }));
 
-function useProductsItems(filterOptions: TFilterOptions) {
+//function useSearchProductsItems(filterOptions: TFilterOptions, q: string) {
+//  const result = useQuery({
+//    queryKey: ["products"],
+//    queryFn: () =>
+//      client(`products/search?q=${q}`).then((data) => {
+//        return filterProducts(data.products, filterOptions);
+//        //return data.products;
+//      }),
+//  });
+
+//  return {
+//    ...result,
+//    products: result.data ? result.data : loadingProducts,
+//  };
+//}
+
+function useProductsItems(filterOptions: TFilterOptions, query?: string) {
+  const serachOptions = query
+    ? `products/search?q=${query}`
+    : "products?limit=0";
+
   const result = useQuery({
     queryKey: ["products"],
     queryFn: () =>
-      client("products").then((data) => {
+      client(serachOptions).then((data) => {
         return filterProducts(data.products, filterOptions);
         //return data.products;
       }),

@@ -7,11 +7,8 @@ async function client(endpoint: string) {
   };
 
   return window
-    .fetch(`${apiURL}/${endpoint}?limit=0`, config)
+    .fetch(`${apiURL}/${endpoint}`, config)
     .then(async (response) => {
-      if (response.status === 401) {
-        return Promise.reject({ message: "Please re-authenticate." });
-      }
       const data: TProductItems = await response.json();
       if (response.ok) {
         return data;

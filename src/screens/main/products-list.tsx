@@ -4,7 +4,18 @@ import { FilterContext } from "../../context/filter-contex";
 import { useProductsItems } from "../../utils/useProductsItems";
 import { Link } from "react-router-dom";
 import { TProductItem } from "../../utils/types";
-import { Card, Image, Text, Badge, Button, Group, Loader } from "@mantine/core";
+import {
+  Card,
+  Image,
+  Text,
+  Badge,
+  Button,
+  Group,
+  Loader,
+  TextInput,
+} from "@mantine/core";
+import { FaSistrix } from "react-icons/fa";
+import { useDebouncedState } from "@mantine/hooks";
 
 function ProductCard({ product }: { product: TProductItem }) {
   const { title, description, price, thumbnail, discountPercentage } = product;
@@ -49,36 +60,80 @@ function ProductCard({ product }: { product: TProductItem }) {
     </Card>
   );
 }
+function SearchProductsInput() {
+  const [queryValue, setQueryValue] = useDebouncedState("", 300);
+  //const [queryValue, setQueryValue] = useState("");
+  const { filterOptions } = useContext(FilterContext);
+  const { refetch, isFetching } = useProductsItems(filterOptions, queryValue);
+
+  useEffect(() => {
+    refetch();
+  }, [queryValue]);
+
+  function setValueOne(e: string) {
+    setQueryValue(e);
+  }
+  return (
+    <>
+      <TextInput
+        placeholder="Search"
+        icon={<FaSistrix />}
+        rightSection={isFetching ? <Loader size="xs" /> : false}
+        onChange={(e) => setValueOne(e.target.value)}
+      />
+
+      <Text>Debounced value: {queryValue}</Text>
+    </>
+  );
+}
 
 function ProductsList() {
   const { filterOptions } = useContext(FilterContext);
   const { products, refetch, isFetching } = useProductsItems(filterOptions);
+  //const [searchProductsInput, setSearchProductsInput] = useState("");
 
   useEffect(() => {
     refetch();
   }, [filterOptions]);
-  return isFetching ? (
-    <div
-      css={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Loader />
-    </div>
-  ) : (
-    <div
-      css={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-        rowGap: 40,
-        columnGap: 20,
-      }}
-    >
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+
+  // onChange={(event) =>
+  //   setSearchProductsInput(event.currentTarget.value)
+  // }
+  return (
+    <div css={{ padding: 20 }}>
+      <SearchProductsInput />
+      <div
+        css={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: 20,
+        }}
+      ></div>
+      {isFetching ? (
+        <div
+          css={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Loader />
+        </div>
+      ) : (
+        <div
+          css={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            rowGap: 40,
+            columnGap: 20,
+          }}
+        >
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

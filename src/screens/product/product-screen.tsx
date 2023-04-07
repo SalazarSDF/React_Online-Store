@@ -19,7 +19,6 @@ function ProductScreen() {
     brand,
     category,
   } = product;
-  console.log(images, 'eto images ')
   return (
     <Card withBorder shadow="sm" radius="md">
       <Card.Section withBorder inheritPadding py="xs">

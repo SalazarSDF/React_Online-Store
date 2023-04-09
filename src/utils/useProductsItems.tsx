@@ -67,7 +67,14 @@ function useProductsItems(filterOptions: TFilterOptions, query?: string) {
 
   return {
     ...result,
-    products: result.data ? result.data : loadingProducts,
+    products: result.data?.products ? result.data.products : loadingProducts,
+    totalMinMaxPrice: result.data?.totalMinMaxPrice
+      ? result.data.totalMinMaxPrice
+      : [0, 9999999],
+
+    totalMinMaxStock: result.data?.totalMinMaxStock
+      ? result.data.totalMinMaxStock
+      : [0, 9999999],
   };
 }
 

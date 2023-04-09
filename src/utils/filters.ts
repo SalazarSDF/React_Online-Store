@@ -10,6 +10,33 @@ import { TFilterOptions } from "./types";
 //   );
 //   return filteredProducts;
 // };
+function findMinMaxPrice(products: TProductItem[]): {
+  totalMinMaxPrice: [number, number];
+  totalMinMaxStock: [number, number];
+} {
+  const totalMinPrice = products.reduce(
+    (min, el) => (el.price < min ? el.price : min),
+    Infinity
+  );
+  const totalMaxPrice = products.reduce(
+    (max, el) => (el.price > max ? el.price : max),
+    0
+  );
+
+  const totalMinStock = products.reduce(
+    (min, el) => (el.stock < min ? el.stock : min),
+    Infinity
+  );
+  const totalMaxStock = products.reduce(
+    (max, el) => (el.stock > max ? el.stock : max),
+    0
+  );
+
+  return {
+    totalMinMaxPrice: [totalMinPrice, totalMaxPrice],
+    totalMinMaxStock: [totalMinStock, totalMaxStock],
+  };
+}
 
 async function filterProducts(
   products: TProductItem[],
@@ -18,6 +45,7 @@ async function filterProducts(
   const { category, brand, price, stock } = filterOptions;
   const [minPrice, maxPrice] = price;
   const [minStock, maxStock] = stock;
+  const { totalMinMaxPrice, totalMinMaxStock } = findMinMaxPrice(products);
   let filteredProducts = [...products];
   if (category.length) {
     filteredProducts = filteredProducts.filter((product) =>
@@ -39,7 +67,11 @@ async function filterProducts(
       (product) => product.stock >= minStock && product.stock <= maxStock
     );
   }
-  return Promise.resolve(filteredProducts);
+  return Promise.resolve({
+    products: filteredProducts,
+    totalMinMaxPrice,
+    totalMinMaxStock,
+  });
 }
 export { filterProducts };
 

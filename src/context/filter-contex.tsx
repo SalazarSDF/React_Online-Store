@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { createContext } from "react";
 import { TFilterContextType, TFilterOptions } from "../utils/types";
 import qs from "qs";
-import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const FilterContext = createContext<TFilterContextType>({
@@ -17,7 +16,7 @@ const FilterContext = createContext<TFilterContextType>({
 FilterContext.displayName = "FILTERCONTEXT";
 
 function initalFilterOptions() {
-  let baseOptions = {
+  let baseOptions: TFilterOptions = {
     category: [],
     brand: [],
     price: [0, Infinity],
@@ -38,8 +37,6 @@ function FilterProvider({ children }: { children: React.ReactNode }) {
     const queryString = qs.stringify(filterOptions);
     //console.log(queryString, "eto query string");
     navigate(`?${queryString}`);
-    console.log(qs.parse(queryString), "eto return from qs");
-    console.log(filterOptions, "eto return from filterOptions");
   }, [filterOptions]);
   return (
     <FilterContext.Provider value={{ filterOptions, setFilterOptions }}>

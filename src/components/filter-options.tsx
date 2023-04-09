@@ -8,27 +8,17 @@ import { useProductsItems } from "../utils/useProductsItems";
 
 function FilterByStock() {
   const { filterOptions, setFilterOptions } = useContext(FilterContext);
-  const { isLoading, products, isInitialLoading } =
-    useProductsItems(filterOptions);
-  const [initialMinMax, setInitialMinMax] = useState([0, Infinity]);
+  const { isLoading, totalMinMaxStock } = useProductsItems(filterOptions);
   const [rangeValue, setRangeValue] = useState<[number, number]>([0, Infinity]);
+  const [totalMinStock, totalMaxStock] = totalMinMaxStock;
   const setFilterStock = (newStock: [number, number]) => {
     setRangeValue(newStock);
     setFilterOptions({ ...filterOptions, stock: newStock });
   };
 
   useEffect(() => {
-    const initialMin = products.reduce(
-      (min, el) => (el.stock < min ? el.stock : min),
-      Infinity
-    );
-    const initialMax = products.reduce(
-      (max, el) => (el.stock > max ? el.stock : max),
-      0
-    );
-    setInitialMinMax([initialMin, initialMax]);
-    setRangeValue([initialMin, initialMax]);
-  }, [isInitialLoading]);
+    setRangeValue(filterOptions.stock);
+  }, [isLoading]);
 
   return isLoading ? (
     <Loader />
@@ -52,8 +42,8 @@ function FilterByStock() {
         Filter by Stock:
       </span>
       <RangeSlider
-        min={initialMinMax[0]}
-        max={initialMinMax[1]}
+        min={totalMinStock}
+        max={totalMaxStock}
         label={(value) => `${value}`}
         value={rangeValue}
         onChange={setRangeValue}
@@ -65,27 +55,16 @@ function FilterByStock() {
 
 function FilterByPrice() {
   const { filterOptions, setFilterOptions } = useContext(FilterContext);
-  const { isLoading, products, isInitialLoading } =
-    useProductsItems(filterOptions);
-  const [initialMinMax, setInitialMinMax] = useState([0, Infinity]);
+  const { isLoading, totalMinMaxPrice } = useProductsItems(filterOptions);
+  const [totalMinPrice, totalMaxPrice] = totalMinMaxPrice;
   const [rangeValue, setRangeValue] = useState<[number, number]>([0, Infinity]);
   const setFilterPrice = (newPrice: [number, number]) => {
     setRangeValue(newPrice);
     setFilterOptions({ ...filterOptions, price: newPrice });
   };
-
   useEffect(() => {
-    const initialMin = products.reduce(
-      (min, el) => (el.price < min ? el.price : min),
-      Infinity
-    );
-    const initialMax = products.reduce(
-      (max, el) => (el.price > max ? el.price : max),
-      0
-    );
-    setInitialMinMax([initialMin, initialMax]);
-    setRangeValue([initialMin, initialMax]);
-  }, [isInitialLoading]);
+    setRangeValue(filterOptions.price);
+  }, [isLoading]);
 
   return isLoading ? (
     <Loader />
@@ -109,8 +88,8 @@ function FilterByPrice() {
         Filter by Price:
       </span>
       <RangeSlider
-        min={initialMinMax[0]}
-        max={initialMinMax[1]}
+        min={totalMinPrice}
+        max={totalMaxPrice}
         label={(value) => `${value} $`}
         value={rangeValue}
         onChange={setRangeValue}
@@ -136,34 +115,53 @@ const categoryAndBrandCss = css({
 });
 
 function FilterByCategory() {
+  const [value, setValue] = useState([""]);
   const { filterOptions, setFilterOptions } = useContext(FilterContext);
+  const { isLoading } = useProductsItems(filterOptions);
   const setCategoryFilter = (newCategories: string[]) => {
     setFilterOptions({ ...filterOptions, category: newCategories });
   };
+  useEffect(() => {
+    setValue(filterOptions.category);
+  }, [isLoading]);
   return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Category:</span>
       <MultiSelect
         data={categoryData}
-        onChange={(newCategories) => setCategoryFilter(newCategories)}
+        onChange={(newCategories) => {
+          setCategoryFilter(newCategories);
+          setValue(newCategories);
+        }}
         placeholder="Pick category that you like"
+        value={value}
       />
     </div>
   );
 }
 
 function FilterByBrand() {
+  const [value, setValue] = useState([""]);
   const { filterOptions, setFilterOptions } = useContext(FilterContext);
+  const { isLoading } = useProductsItems(filterOptions);
   const setBrandFilter = (newBrands: string[]) => {
     setFilterOptions({ ...filterOptions, brand: newBrands });
   };
+
+  useEffect(() => {
+    setValue(filterOptions.brand);
+  }, [isLoading]);
   return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Brand:</span>
       <MultiSelect
         data={brandsData}
-        onChange={(newBrands) => setBrandFilter(newBrands)}
+        onChange={(newBrands) => {
+          setValue(newBrands);
+          setBrandFilter(newBrands);
+        }}
         placeholder="Pick brands that you like"
+        value={value}
       />
     </div>
   );

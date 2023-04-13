@@ -39,7 +39,7 @@ const loadingProducts = Array.from({ length: 10 }, (v, index) => ({
 
 function useProductItem(query: string) {
   const result = useQuery({
-    queryKey: ["products"],
+    queryKey: ["product"],
     queryFn: () =>
       client<TProductItem>(`products/${query}`).then((data) => {
         return data;

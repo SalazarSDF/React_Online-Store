@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { CiShoppingCart } from "react-icons/ci";
+import { useShopCartContext } from "../context/cart-contex";
 function Logo() {
   return (
     <Link
@@ -17,6 +18,7 @@ function Logo() {
 }
 
 function ShopCart() {
+  const { shopCartProducts } = useShopCartContext();
   return (
     <Link
       css={{
@@ -25,8 +27,29 @@ function ShopCart() {
       }}
       to="/shopcart"
     >
-      <FaShoppingCart />
-      Cart
+      <div
+        css={{
+          width: 45,
+          height: 45,
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}
+      >
+        <CiShoppingCart css={{ width: 34, height: 34 }} />
+        <span
+          css={{
+            position: "absolute",
+            fontSize: 10,
+            fontWeight: "bold",
+            right: 13,
+          }}
+        >
+          {shopCartProducts.length}
+        </span>
+      </div>
     </Link>
   );
 }

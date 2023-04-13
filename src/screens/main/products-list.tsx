@@ -16,14 +16,30 @@ import {
 } from "@mantine/core";
 import { FaSistrix } from "react-icons/fa";
 import { useDebouncedState } from "@mantine/hooks";
+import { useShopCartContext } from "../../context/cart-contex";
 
 function ProductCard({ product }: { product: TProductItem }) {
   const { title, description, price, thumbnail, discountPercentage } = product;
+  const { shopCartProducts, addProductToCart, removeProductFromCart } =
+    useShopCartContext();
 
-  const [inCart, setInCart] = useState(false);
-  function addProductToCart() {
-    inCart ? setInCart(false) : setInCart(true);
+  const [inCart, setInCart] = useState(() => {
+    return shopCartProducts.some(
+      (cartProduct) => cartProduct.id === product.id
+    );
+  });
+
+  function addRemoveProduct() {
+    if (inCart) {
+      setInCart(false);
+      removeProductFromCart(product);
+    }
+    if (!inCart) {
+      setInCart(true);
+      addProductToCart(product);
+    }
   }
+
   return (
     <Card shadow="sm" padding="lg" radius="xs">
       <Link css={{ textDecoration: "none" }} to={`/product/${product.id}`}>
@@ -52,7 +68,7 @@ function ProductCard({ product }: { product: TProductItem }) {
         mt="md"
         fullWidth
         radius="md"
-        onClick={addProductToCart}
+        onClick={addRemoveProduct}
       >
         {inCart ? "Remove From Cart" : "Add to Cart"}
       </Button>
@@ -89,15 +105,11 @@ function SearchProductsInput() {
 function ProductsList() {
   const { filterOptions } = useContext(FilterContext);
   const { products, refetch, isFetching } = useProductsItems(filterOptions);
-  //const [searchProductsInput, setSearchProductsInput] = useState("");
 
   useEffect(() => {
     refetch();
   }, [filterOptions]);
 
-  // onChange={(event) =>
-  //   setSearchProductsInput(event.currentTarget.value)
-  // }
   return (
     <div css={{ padding: 20 }}>
       <SearchProductsInput />

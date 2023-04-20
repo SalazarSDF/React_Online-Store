@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useProductItem } from "../../utils/useProductsItems";
+//
+//import { useProductItem } from "../../utils/useProductsItems";
 import { Card, Group, Text, Image, SimpleGrid } from "@mantine/core";
 
 function ProductScreen() {
@@ -32,7 +33,9 @@ function ProductScreen() {
           Description: {description}
         </Text>
 
-        <Text mt="sm" color="dimmed" size="sm">Discount: {discountPercentage}%</Text>
+        <Text mt="sm" color="dimmed" size="sm">
+          Discount: {discountPercentage}%
+        </Text>
 
         <Text mt="sm" color="dimmed" size="sm">
           Rating: {rating}
@@ -66,4 +69,4 @@ function ProductScreen() {
   );
 }
 
-export { ProductScreen };
+//export { ProductScreen };

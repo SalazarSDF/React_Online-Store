@@ -63,9 +63,18 @@ function useProductsItems(filterOptions: TFilterOptions, query?: string) {
         return filterProducts(data.products, filterOptions);
         //return data.products;
       }),
+    onError: (err) => {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+    },
   });
+  //if (result.data === undefined) {
+  //console.log("RESULT DATA === undefined");
+  //console.log("etot result", result);
+  //}
 
-  return {
+  const govnoJopa = {
     ...result,
     products: result.data?.products ? result.data.products : loadingProducts,
     totalMinMaxPrice: result.data?.totalMinMaxPrice
@@ -76,6 +85,8 @@ function useProductsItems(filterOptions: TFilterOptions, query?: string) {
       ? result.data.totalMinMaxStock
       : [0, 9999999],
   };
+  console.log("govnoJopa", govnoJopa);
+  return govnoJopa;
 }
 
 export { useProductsItems, useProductItem };

@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useContext, useEffect, useState } from "react";
-import { FilterContext } from "../../context/filter-contex";
-import { useProductsItems } from "../../utils/useProductsItems";
+import { useEffect, useState } from "react";
+//import { useFilterContext } from "../../context/filter-contex";
+//import { useProductsItems } from "../../utils/useProductsItems";
+import { useProductsContext } from "../../context/products-context";
 import { Link } from "react-router-dom";
 import { TProductItem } from "../../utils/types";
 import {
@@ -78,12 +79,12 @@ function ProductCard({ product }: { product: TProductItem }) {
 function SearchProductsInput() {
   const [queryValue, setQueryValue] = useDebouncedState("", 300);
   //const [queryValue, setQueryValue] = useState("");
-  const { filterOptions } = useContext(FilterContext);
-  const { refetch, isFetching } = useProductsItems(filterOptions, queryValue);
+  //const { filterOptions } = useFilterContext();
+  // const { refetch, isFetching } = useProductsItems(filterOptions, queryValue);
 
-  useEffect(() => {
-    refetch();
-  }, [queryValue]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [queryValue]);
 
   function setValueOne(e: string) {
     setQueryValue(e);
@@ -93,7 +94,7 @@ function SearchProductsInput() {
       <TextInput
         placeholder="Search"
         icon={<FaSistrix />}
-        rightSection={isFetching ? <Loader size="xs" /> : false}
+        // rightSection={isFetching ? <Loader size="xs" /> : false}
         onChange={(e) => setValueOne(e.target.value)}
       />
 
@@ -102,26 +103,12 @@ function SearchProductsInput() {
   );
 }
 
-function ProductsList() {
-  const { filterOptions } = useContext(FilterContext);
-  const { products, refetch, isFetching } = useProductsItems(filterOptions);
-
-  useEffect(() => {
-    refetch();
-  }, [filterOptions]);
-
+function ProductsList({ products }: { products: TProductItem[] }) {
+  const { isLoading } = useProductsContext();
   return (
     <div css={{ padding: 20 }}>
       <SearchProductsInput />
-      <div
-        css={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 20,
-        }}
-      ></div>
-      {isFetching ? (
+      {isLoading ? (
         <div
           css={{
             display: "flex",
@@ -131,6 +118,8 @@ function ProductsList() {
         >
           <Loader />
         </div>
+      ) : products.length === 0 ? (
+        <h1>Products Not Found =(</h1>
       ) : (
         <div
           css={{

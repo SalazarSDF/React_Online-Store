@@ -54,22 +54,32 @@ function ShopCart() {
   );
 }
 
+function ShopCartTotal() {
+  const { cartTotal } = useShopCartContext();
+  return (
+    <div css={{ borderRadius: 20, boreder: "2px solid orangered" }}>
+      <span css={{ color: "orangered" }}>Cart total: </span>
+      {cartTotal}$
+    </div>
+  );
+}
+
 function Header() {
   return (
     <>
       <nav
         css={{
-          position: "sticky",
-          backgroundColor: "blue",
+          backgroundColor: "darkblue",
           display: "flex",
           justifyContent: "space-between",
           margin: "0 auto",
-          width: "100%",
           height: "80px",
           alignItems: "center",
+          padding: "0 30px",
         }}
       >
         <Logo />
+        <ShopCartTotal />
         <ShopCart />
       </nav>
       <Outlet />

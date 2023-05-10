@@ -12,24 +12,16 @@ export type TProductItem = {
   images: string[];
 };
 
-export type TProductItems = {
+export type TClient = {
   products: TProductItem[];
   limit: number;
   skip: number;
   total: number;
 };
 
-
-export type TFilterContextType = {
-  filterOptions: TFilterOptions;
-  setFilterOptions:
-    | React.Dispatch<React.SetStateAction<TFilterOptions>>
-    | (() => void);
-};
-
 export type TFilterOptions = {
-  category: string[];
-  brand: string[];
-  price: [number, number];
-  stock: [number, number];
+  category?: string[];
+  brand?: string[];
+  price?: [number, number];
+  stock?: [number, number];
 };

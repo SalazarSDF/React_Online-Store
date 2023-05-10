@@ -1,17 +1,28 @@
 /** @jsxImportSource @emotion/react */
-import { FilterOptions } from "../../components/filter-options";
+import { useMemo } from "react";
 import { ProductsList } from "./products-list";
-import { FilterProvider } from "../../context/filter-contex";
+import { useFilterContext } from "../../context/filter-contex";
+import { FilterOptions } from "../../components/filter-options";
+import { useProductsContext } from "../../context/products-context";
+import { filterProducts } from "../../utils/filters";
 
 function Main() {
+  const { allProducts } = useProductsContext();
+  const { filterOptions } = useFilterContext();
+  console.log(allProducts, 'eto allProducts')
+
+  console.time("filter array");
+  const filteredProducts = useMemo(
+    () => filterProducts(allProducts, filterOptions),
+    [allProducts, filterOptions]
+  );
+  console.timeEnd("filter array");
+
   return (
     <main css={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
-        <FilterProvider>
-          <FilterOptions />
-          <ProductsList />
-        </FilterProvider>
+      <FilterOptions />
+      <ProductsList products={filteredProducts} />
     </main>
   );
 }
-
 export { Main };

@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useContext, useEffect, useState } from "react";
-import { FilterContext } from "../../context/filter-contex";
-import { useProductsItems } from "../../utils/useProductsItems";
+import { useEffect, useState } from "react";
+//import { useFilterContext } from "../../context/filter-contex";
+//import { useProductsItems } from "../../utils/useProductsItems";
+import { useProductsContext } from "../../context/products-context";
 import { Link } from "react-router-dom";
 import { TProductItem } from "../../utils/types";
 import {
@@ -16,14 +17,30 @@ import {
 } from "@mantine/core";
 import { FaSistrix } from "react-icons/fa";
 import { useDebouncedState } from "@mantine/hooks";
+import { useShopCartContext } from "../../context/cart-contex";
 
 function ProductCard({ product }: { product: TProductItem }) {
   const { title, description, price, thumbnail, discountPercentage } = product;
+  const { shopCartProducts, addProductToCart, removeProductFromCart } =
+    useShopCartContext();
 
-  const [inCart, setInCart] = useState(false);
-  function addProductToCart() {
-    inCart ? setInCart(false) : setInCart(true);
+  const [inCart, setInCart] = useState(() => {
+    return shopCartProducts.some(
+      (cartProduct) => cartProduct.id === product.id
+    );
+  });
+
+  function addRemoveProduct() {
+    if (inCart) {
+      setInCart(false);
+      removeProductFromCart(product);
+    }
+    if (!inCart) {
+      setInCart(true);
+      addProductToCart(product);
+    }
   }
+
   return (
     <Card shadow="sm" padding="lg" radius="xs">
       <Link css={{ textDecoration: "none" }} to={`/product/${product.id}`}>
@@ -52,7 +69,7 @@ function ProductCard({ product }: { product: TProductItem }) {
         mt="md"
         fullWidth
         radius="md"
-        onClick={addProductToCart}
+        onClick={addRemoveProduct}
       >
         {inCart ? "Remove From Cart" : "Add to Cart"}
       </Button>
@@ -62,12 +79,12 @@ function ProductCard({ product }: { product: TProductItem }) {
 function SearchProductsInput() {
   const [queryValue, setQueryValue] = useDebouncedState("", 300);
   //const [queryValue, setQueryValue] = useState("");
-  const { filterOptions } = useContext(FilterContext);
-  const { refetch, isFetching } = useProductsItems(filterOptions, queryValue);
+  //const { filterOptions } = useFilterContext();
+  // const { refetch, isFetching } = useProductsItems(filterOptions, queryValue);
 
-  useEffect(() => {
-    refetch();
-  }, [queryValue]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [queryValue]);
 
   function setValueOne(e: string) {
     setQueryValue(e);
@@ -77,7 +94,7 @@ function SearchProductsInput() {
       <TextInput
         placeholder="Search"
         icon={<FaSistrix />}
-        rightSection={isFetching ? <Loader size="xs" /> : false}
+        // rightSection={isFetching ? <Loader size="xs" /> : false}
         onChange={(e) => setValueOne(e.target.value)}
       />
 
@@ -86,30 +103,12 @@ function SearchProductsInput() {
   );
 }
 
-function ProductsList() {
-  const { filterOptions } = useContext(FilterContext);
-  const { products, refetch, isFetching } = useProductsItems(filterOptions);
-  //const [searchProductsInput, setSearchProductsInput] = useState("");
-
-  useEffect(() => {
-    refetch();
-  }, [filterOptions]);
-
-  // onChange={(event) =>
-  //   setSearchProductsInput(event.currentTarget.value)
-  // }
+function ProductsList({ products }: { products: TProductItem[] }) {
+  const { isLoading } = useProductsContext();
   return (
     <div css={{ padding: 20 }}>
       <SearchProductsInput />
-      <div
-        css={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 20,
-        }}
-      ></div>
-      {isFetching ? (
+      {isLoading ? (
         <div
           css={{
             display: "flex",
@@ -119,6 +118,8 @@ function ProductsList() {
         >
           <Loader />
         </div>
+      ) : products.length === 0 ? (
+        <h1>Products Not Found =(</h1>
       ) : (
         <div
           css={{

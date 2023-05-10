@@ -1,46 +1,34 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { getProductsItems } from "../utils/getProductItems";
+import { createContext, useContext } from "react";
 import { TProductItem } from "../utils/types";
+import { useDataApi } from "../utils/useDataApi";
 
 type TProductsContext = {
   allProducts: TProductItem[];
-  //filteredProducts: TProductItem[];
   isLoading: boolean;
   isError: boolean;
-  //setFilteredProducts: React.Dispatch<React.SetStateAction<TProductItem[]>>;
 };
 
 const ProductContext = createContext<TProductsContext | null>(null);
 ProductContext.displayName = "PRODUCT CONTEXT";
 
 function ProductContextProvider({ children }: { children: React.ReactNode }) {
-  const [allProducts, setAllProducts] = useState<TProductItem[]>([]);
-  //const [filteredProducts, setFilteredProducts] = useState<TProductItem[]>([]);
-  const getResult = getProductsItems();
-
-  //run only when init
-  let didInit = false;
-  useEffect(() => {
-    if (!didInit) {
-      getResult.execute();
-      setAllProducts(getResult.products);
-      didInit = true;
+  //const [query, setQuery]= useState<string | null>(null);
+  const [{ isLoading, isError, data }, doFetch] = useDataApi(
+    "https://dummyjson.com/products?limit=0",
+    {
+      products: [],
+      limit: 0,
+      skip: 0,
+      total: 0,
     }
-    // set loading state
-  }, []);
-
-  useEffect(() => {
-    if (getResult.isSuccess) {
-      setAllProducts(getResult.products);
-    }
-  }, [getResult.isSuccess]);
+  );
 
   return (
     <ProductContext.Provider
       value={{
-        allProducts,
-        isLoading: getResult.isLoading,
-        isError: getResult.isError,
+        allProducts: data.products,
+        isLoading,
+        isError,
       }}
     >
       {children}
@@ -59,3 +47,24 @@ function useProductsContext() {
 }
 
 export { ProductContextProvider, useProductsContext };
+
+// const loadingProduct = {
+//   title: "Loading..",
+//   description: "Loading...",
+//   price: 0,
+//   discountPercentage: 0.0,
+//   rating: 0.0,
+//   stock: 0,
+//   brand: "Loading...",
+//   category: "Loading...",
+//   thumbnail: "",
+//   images: ["", "", ""],
+// };
+
+// const loadingProducts: TProductItem[] = Array.from(
+//   { length: 10 },
+//   (v, index) => ({
+//     id: index,
+//     ...loadingProduct,
+//   })
+// );

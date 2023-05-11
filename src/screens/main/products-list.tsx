@@ -20,14 +20,13 @@ import { useDebouncedState } from "@mantine/hooks";
 import { useShopCartContext } from "../../context/cart-contex";
 
 function ProductCard({ product }: { product: TProductItem }) {
-  const { title, description, price, thumbnail, discountPercentage } = product;
+  const { id, title, description, price, thumbnail, discountPercentage } =
+    product;
   const { shopCartProducts, addProductToCart, removeProductFromCart } =
     useShopCartContext();
 
   const [inCart, setInCart] = useState(() => {
-    return shopCartProducts.some(
-      (cartProduct) => cartProduct.id === product.id
-    );
+    return shopCartProducts.some((el) => el.id === product.id);
   });
 
   function addRemoveProduct() {
@@ -43,7 +42,7 @@ function ProductCard({ product }: { product: TProductItem }) {
 
   return (
     <Card shadow="sm" padding="lg" radius="xs">
-      <Link css={{ textDecoration: "none" }} to={`/product/${product.id}`}>
+      <Link css={{ textDecoration: "none" }} to={`/product/${id}`}>
         <Card.Section>
           <Image src={thumbnail} withPlaceholder height={160} alt={title} />
         </Card.Section>
@@ -69,7 +68,7 @@ function ProductCard({ product }: { product: TProductItem }) {
         mt="md"
         fullWidth
         radius="md"
-        onClick={addRemoveProduct}
+        onClick={() => addRemoveProduct()}
       >
         {inCart ? "Remove From Cart" : "Add to Cart"}
       </Button>
@@ -78,13 +77,6 @@ function ProductCard({ product }: { product: TProductItem }) {
 }
 function SearchProductsInput() {
   const [queryValue, setQueryValue] = useDebouncedState("", 300);
-  //const [queryValue, setQueryValue] = useState("");
-  //const { filterOptions } = useFilterContext();
-  // const { refetch, isFetching } = useProductsItems(filterOptions, queryValue);
-
-  // useEffect(() => {
-  //   refetch();
-  // }, [queryValue]);
 
   function setValueOne(e: string) {
     setQueryValue(e);

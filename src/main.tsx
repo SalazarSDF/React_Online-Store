@@ -10,13 +10,13 @@ import { FilterContextProvider } from "./context/filter-contex";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ShopCartContextProvider>
-        <ProductContextProvider>
+      <ProductContextProvider>
+        <ShopCartContextProvider>
           <FilterContextProvider>
             <App />
           </FilterContextProvider>
-        </ProductContextProvider>
-      </ShopCartContextProvider>
+        </ShopCartContextProvider>
+      </ProductContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

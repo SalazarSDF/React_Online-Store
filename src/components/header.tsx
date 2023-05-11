@@ -55,11 +55,15 @@ function ShopCart() {
 }
 
 function ShopCartTotal() {
-  const { cartTotal } = useShopCartContext();
+  const { shopCartProducts } = useShopCartContext();
+  const cartTotalPrice = shopCartProducts.reduce(
+    (sum, el) => (sum = sum + el.price),
+    0
+  );
   return (
     <div css={{ borderRadius: 20, boreder: "2px solid orangered" }}>
       <span css={{ color: "orangered" }}>Cart total: </span>
-      {cartTotal}$
+      {cartTotalPrice}$
     </div>
   );
 }

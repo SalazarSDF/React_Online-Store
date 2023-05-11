@@ -1,80 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { RangeSlider, Loader, MultiSelect } from "@mantine/core";
 import { css } from "@emotion/react";
 import { brandsData, categoryData } from "../utils/brands-category-data";
 import { useFilterContext } from "../context/filter-contex";
 import { useProductsContext } from "../context/products-context";
-//import { useProductsItems } from "../utils/useProductsItems";
-
-function FilterByStock() {
-  const { filterOptions, setFilterOptions } = useFilterContext();
-  //const { isLoading, totalMinMaxStock } = useProductsItems(filterOptions);
-  const isLoading = true;
-  const totalMinMaxStock = [10, 40000000000];
-  const [rangeValue, setRangeValue] = useState<[number, number]>([0, Infinity]);
-  const [totalMinStock, totalMaxStock] = totalMinMaxStock;
-  const setFilterStock = (newStock: [number, number]) => {
-    if (newStock[0] && newStock[1]) {
-      setRangeValue(newStock);
-      setFilterOptions({ ...filterOptions, stock: newStock });
-    }
-  };
-
-  // useEffect(() => {
-  //   setRangeValue(filterOptions.stock);
-  // }, [isLoading]);
-
-  return isLoading ? (
-    <Loader />
-  ) : (
-    <div
-      css={{
-        border: "2px solid orange",
-        borderRadius: 10,
-        background: "darkblue",
-        padding: 20,
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
-      }}
-    >
-      <span
-        css={{
-          borderBottom: "1px solid black",
-        }}
-      >
-        Filter by Stock:
-      </span>
-      <RangeSlider
-        min={totalMinStock}
-        max={totalMaxStock}
-        label={(value) => `${value}`}
-        value={rangeValue}
-        onChange={setRangeValue}
-        onChangeEnd={(newStock) => setFilterStock(newStock)}
-      />
-    </div>
-  );
-}
 
 function FilterByPrice() {
   const { filterOptions, setFilterOptions } = useFilterContext();
   const { isLoading } = useProductsContext();
-  const [totalMinPrice, totalMaxPrice] = [10, 1749];
-  const [rangeValue, setRangeValue] = useState<[number, number]>();
+  const [rangeValue, setRangeValue] = useState<[number, number]>(() => {
+    return filterOptions.price ? filterOptions.price : [10, 1749];
+  });
 
   const setFilterPrice = (newPrice: [number, number]) => {
+    console.log(newPrice, "its new price indside event handelre");
     if (newPrice[0] && newPrice[1]) {
-      setRangeValue(newPrice);
       setFilterOptions({ ...filterOptions, price: newPrice });
     }
   };
-  // useEffect(() => {
-  //   if (filterOptions.price) {
-  //     setRangeValue(filterOptions.price);
-  //   }
-  // }, [filterOptions]);
 
   return isLoading ? (
     <Loader />
@@ -98,12 +42,55 @@ function FilterByPrice() {
         Filter by Price:
       </span>
       <RangeSlider
-        min={totalMinPrice}
-        max={totalMaxPrice}
+        min={10}
+        max={1749}
         label={(value) => `${value} $`}
         value={rangeValue}
         onChange={setRangeValue}
         onChangeEnd={(newPrice) => setFilterPrice(newPrice)}
+      />
+    </div>
+  );
+}
+
+function FilterByStock() {
+  const { filterOptions, setFilterOptions } = useFilterContext();
+  const [rangeValue, setRangeValue] = useState<[number, number]>(() => {
+    return filterOptions.stock ? filterOptions.stock : [2, 150];
+  });
+  const setFilterStock = (newStock: [number, number]) => {
+    if (newStock[0] && newStock[1]) {
+      setRangeValue(newStock);
+      setFilterOptions({ ...filterOptions, stock: newStock });
+    }
+  };
+
+  return (
+    <div
+      css={{
+        border: "2px solid orange",
+        borderRadius: 10,
+        background: "darkblue",
+        padding: 20,
+        display: "flex",
+        flexDirection: "column",
+        gap: 20,
+      }}
+    >
+      <span
+        css={{
+          borderBottom: "1px solid black",
+        }}
+      >
+        Filter by Stock:
+      </span>
+      <RangeSlider
+        min={2}
+        max={150}
+        label={(value) => `${value}`}
+        value={rangeValue}
+        onChange={setRangeValue}
+        onChangeEnd={(newStock) => setFilterStock(newStock)}
       />
     </div>
   );
@@ -125,17 +112,16 @@ const categoryAndBrandCss = css({
 });
 
 function FilterByCategory() {
-  const [value, setValue] = useState([""]);
   const { filterOptions, setFilterOptions } = useFilterContext();
-  const { isLoading } = useProductsContext();
 
+  const [value, setValue] = useState(() => {
+    return filterOptions.category ? filterOptions.category : [""];
+  });
   const setCategoryFilter = (newCategories: string[]) => {
     setFilterOptions({ ...filterOptions, category: newCategories });
   };
 
-  return isLoading ? (
-    <Loader />
-  ) : (
+  return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Category:</span>
       <MultiSelect
@@ -152,24 +138,23 @@ function FilterByCategory() {
 }
 
 function FilterByBrand() {
-  const [value, setValue] = useState([""]);
   const { filterOptions, setFilterOptions } = useFilterContext();
-  //const { isLoading } = useProductsItems(filterOptions);
+
+  const [value, setValue] = useState(() => {
+    return filterOptions.brand ? filterOptions.brand : [""];
+  });
   const setBrandFilter = (newBrands: string[]) => {
     setFilterOptions({ ...filterOptions, brand: newBrands });
   };
 
-  // useEffect(() => {
-  //   setValue(filterOptions.brand);
-  // }, [isLoading]);
   return (
     <div css={categoryAndBrandCss}>
       <span>Filter by Brand:</span>
       <MultiSelect
         data={brandsData}
         onChange={(newBrands) => {
-          setValue(newBrands);
           setBrandFilter(newBrands);
+          setValue(newBrands);
         }}
         placeholder="Pick brands that you like"
         value={value}

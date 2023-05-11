@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { createContext } from "react";
 import { TFilterOptions } from "../utils/types";
 import qs from "qs";
@@ -9,31 +9,48 @@ export type TFilterContextType = {
   filterOptions: TFilterOptions;
   setFilterOptions: React.Dispatch<React.SetStateAction<TFilterOptions>>;
   isFilterOptionsExist: boolean;
-  setFiltersInUrl: () => void;
 };
 
 const FilterContext = createContext<TFilterContextType | null>(null);
 FilterContext.displayName = "FILTERCONTEXT";
 
-function parseUrl() {
+function parseUrl(): TFilterOptions {
+  //no filter options
   if (!window.location.search) return {};
   const parsedObject = qs.parse(window.location.search.substr(1));
   let paresedFilterOptions = {};
-  if (parsedObject.price && Array.isArray(parsedObject.price)) {
+  console.log(parsedObject, "eto parsedObject");
+  if (parsedObject.price) {
+    if (!Array.isArray(parsedObject.price))
+      throw new Error("parsed filter opton PRICE should be array");
     const [minPrice, maxPrice] = parsedObject.price;
     paresedFilterOptions = {
       ...paresedFilterOptions,
       price: [Number(minPrice), Number(maxPrice)],
     };
   }
-  if (parsedObject.stock && Array.isArray(parsedObject.stock)) {
+  if (parsedObject.stock) {
+    if (!Array.isArray(parsedObject.stock))
+      throw new Error("parsed filter options STOCK should be array");
     const [minStock, maxStock] = parsedObject.stock;
     paresedFilterOptions = {
       ...paresedFilterOptions,
-      price: [Number(minStock), Number(maxStock)],
+      stock: [Number(minStock), Number(maxStock)],
     };
   }
-  console.log("paresedFilterOptions", paresedFilterOptions);
+  if (parsedObject.category) {
+    paresedFilterOptions = {
+      ...paresedFilterOptions,
+      category: parsedObject.category,
+    };
+  }
+  if (parsedObject.brand) {
+    paresedFilterOptions = {
+      ...paresedFilterOptions,
+      brand: parsedObject.brand,
+    };
+  }
+  console.log(" eto paresedFilterOptions", paresedFilterOptions);
   return paresedFilterOptions;
 }
 
@@ -54,7 +71,6 @@ function FilterContextProvider({ children }: { children: React.ReactNode }) {
     checkIsFilterOptions(filterOptions)
   );
 
-  //TODO: move this function to place where i should change url 
   function setFiltersInUrl() {
     setIsFilterOptionsExist(checkIsFilterOptions(filterOptions));
     if (isFilterOptionsExist) {
@@ -65,6 +81,15 @@ function FilterContextProvider({ children }: { children: React.ReactNode }) {
       navigate("");
     }
   }
+  useEffect(() => {
+    setFiltersInUrl();
+  }, [
+    filterOptions.category,
+    filterOptions.brand,
+    filterOptions.price,
+    filterOptions.stock,
+    isFilterOptionsExist,
+  ]);
 
   return (
     <FilterContext.Provider
@@ -72,7 +97,6 @@ function FilterContextProvider({ children }: { children: React.ReactNode }) {
         filterOptions,
         setFilterOptions,
         isFilterOptionsExist,
-        setFiltersInUrl,
       }}
     >
       {children}

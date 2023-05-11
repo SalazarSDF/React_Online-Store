@@ -40,23 +40,23 @@ function filterProducts(
       price
     )} stock${Boolean(stock)}`
   );
-  if (category) {
+  if (category && category.length !== 0) {
     filteredProducts = filteredProducts.filter((product) =>
       category.includes(product.category)
     );
   }
-  if (brand) {
+  if (brand && brand.length !== 0) {
     filteredProducts = filteredProducts.filter((product) =>
       brand.includes(product.brand)
     );
   }
-  if (price) {
+  if (price && price.length === 2) {
     const [minPrice, maxPrice] = price;
     filteredProducts = filteredProducts.filter(
       (product) => product.price >= minPrice && product.price <= maxPrice
     );
   }
-  if (stock) {
+  if (stock && stock.length === 2) {
     const [minStock, maxStock] = stock;
     filteredProducts = filteredProducts.filter(
       (product) => product.stock >= minStock && product.stock <= maxStock

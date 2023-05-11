@@ -9,7 +9,6 @@ import { filterProducts } from "../../utils/filters";
 function Main() {
   const { allProducts } = useProductsContext();
   const { filterOptions } = useFilterContext();
-  console.log(allProducts, 'eto allProducts')
 
   console.time("filter array");
   const filteredProducts = useMemo(

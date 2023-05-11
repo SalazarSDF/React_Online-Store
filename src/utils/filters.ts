@@ -35,11 +35,6 @@ function filterProducts(
 ) {
   const { category, brand, price, stock } = filterOptions;
   let filteredProducts = [...products];
-  console.log(
-    `category${Boolean(category)} brand${Boolean(brand)} price${Boolean(
-      price
-    )} stock${Boolean(stock)}`
-  );
   if (category && category.length !== 0) {
     filteredProducts = filteredProducts.filter((product) =>
       category.includes(product.category)

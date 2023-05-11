@@ -6,6 +6,7 @@ type TProductsContext = {
   allProducts: TProductItem[];
   isLoading: boolean;
   isError: boolean;
+  doFetch: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ProductContext = createContext<TProductsContext | null>(null);
@@ -29,6 +30,7 @@ function ProductContextProvider({ children }: { children: React.ReactNode }) {
         allProducts: data.products,
         isLoading,
         isError,
+        doFetch,
       }}
     >
       {children}

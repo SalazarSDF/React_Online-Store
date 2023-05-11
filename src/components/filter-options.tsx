@@ -14,7 +14,6 @@ function FilterByPrice() {
   });
 
   const setFilterPrice = (newPrice: [number, number]) => {
-    console.log(newPrice, "its new price indside event handelre");
     if (newPrice[0] && newPrice[1]) {
       setFilterOptions({ ...filterOptions, price: newPrice });
     }

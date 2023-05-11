@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useMemo } from "react";
-import { ProductsList } from "./products-list";
+import ProductsList from "./products-list";
 import { useFilterContext } from "../../context/filter-contex";
 import { FilterOptions } from "../../components/filter-options";
 import { useProductsContext } from "../../context/products-context";

@@ -19,7 +19,6 @@ function parseUrl(): TFilterOptions {
   if (!window.location.search) return {};
   const parsedObject = qs.parse(window.location.search.substr(1));
   let paresedFilterOptions = {};
-  console.log(parsedObject, "eto parsedObject");
   if (parsedObject.price) {
     if (!Array.isArray(parsedObject.price))
       throw new Error("parsed filter opton PRICE should be array");
@@ -50,7 +49,6 @@ function parseUrl(): TFilterOptions {
       brand: parsedObject.brand,
     };
   }
-  console.log(" eto paresedFilterOptions", paresedFilterOptions);
   return paresedFilterOptions;
 }
 

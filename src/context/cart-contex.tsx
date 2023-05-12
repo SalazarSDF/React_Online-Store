@@ -12,16 +12,28 @@ const ShopCartContext = createContext<TShopCartContext | null>(null);
 ShopCartContext.displayName = "SHOPINGCARTCONTEXT";
 
 function ShopCartContextProvider({ children }: { children: React.ReactNode }) {
-  const [shopCartProducts, setShopCartProducts] = useState<TProductItem[]>([]);
+  function getItemsFromLocalStorage(): TProductItem[] {
+    const lsValue = localStorage.getItem("shopCartIds");
+    if (lsValue) {
+      return JSON.parse(lsValue);
+    }
+    return [];
+  }
+  const [shopCartProducts, setShopCartProducts] = useState<TProductItem[]>(
+    getItemsFromLocalStorage()
+  );
 
   function addProductToCart(product: TProductItem) {
-    setShopCartProducts([...shopCartProducts, product]);
+    const update = [...shopCartProducts, product];
+    setShopCartProducts(update);
+    localStorage.setItem("shopCartIds", JSON.stringify(update));
   }
 
   function removeProductFromCart(product: TProductItem) {
-    setShopCartProducts(shopCartProducts.filter((el) => el.id !== product.id));
+    const update = shopCartProducts.filter((el) => el.id !== product.id);
+    setShopCartProducts(update);
+    localStorage.setItem("shopCartIds", JSON.stringify(update));
   }
-
 
   return (
     <ShopCartContext.Provider

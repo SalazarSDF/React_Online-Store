@@ -57,7 +57,7 @@ function ShopCart() {
 function ShopCartTotal() {
   const { shopCartProducts } = useShopCartContext();
   const cartTotalPrice = shopCartProducts.reduce(
-    (sum, el) => (sum = sum + el.price),
+    (sum, scp) => (sum = sum + scp.price),
     0
   );
   return (

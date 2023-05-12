@@ -13,7 +13,6 @@ const ProductContext = createContext<TProductsContext | null>(null);
 ProductContext.displayName = "PRODUCT CONTEXT";
 
 function ProductContextProvider({ children }: { children: React.ReactNode }) {
-  //const [query, setQuery]= useState<string | null>(null);
   const [{ isLoading, isError, data }, doFetch] = useDataApi(
     "https://dummyjson.com/products?limit=0",
     {

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { RangeSlider, Loader, MultiSelect } from "@mantine/core";
 import { css } from "@emotion/react";
 import { brandsData, categoryData } from "../utils/brands-category-data";
@@ -15,7 +15,7 @@ function FilterByPrice() {
 
   const setFilterPrice = (newPrice: [number, number]) => {
     if (newPrice[0] && newPrice[1]) {
-      setFilterOptions({ ...filterOptions, price: newPrice });
+      setFilterOptions({ ...filterOptions, price: [newPrice[0], newPrice[1]] });
     }
   };
 
@@ -58,9 +58,9 @@ function FilterByStock() {
     return filterOptions.stock ? filterOptions.stock : [2, 150];
   });
   const setFilterStock = (newStock: [number, number]) => {
+    console.log(newStock, "newStock");
     if (newStock[0] && newStock[1]) {
-      setRangeValue(newStock);
-      setFilterOptions({ ...filterOptions, stock: newStock });
+      setFilterOptions({ ...filterOptions, stock: [newStock[0], newStock[1]] });
     }
   };
 
@@ -94,11 +94,6 @@ function FilterByStock() {
     </div>
   );
 }
-
-// marks={[
-//   { value: minPrice, label: `${minPrice}$` },
-//   { value: maxPrice, label: `${maxPrice}$` },
-// ]}
 
 const categoryAndBrandCss = css({
   border: "2px solid orange",
@@ -161,18 +156,6 @@ function FilterByBrand() {
     </div>
   );
 }
-/*
-{
-  "toppings": [
-    "pepperoni",
-    "bell-peppers",
-    "olives"
-  ],
-  "crust": "thin",
-  "extraSauce": false
-}
-
-*/
 
 function FilterOptions() {
   return (

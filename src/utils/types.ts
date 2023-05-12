@@ -24,4 +24,5 @@ export type TFilterOptions = {
   brand?: string[];
   price?: [number, number];
   stock?: [number, number];
+  query?: string;
 };

@@ -3,7 +3,6 @@ import { createContext } from "react";
 import { TFilterOptions } from "../utils/types";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-//import { filterProducts } from "../utils/filters";
 
 export type TFilterContextType = {
   filterOptions: TFilterOptions;
@@ -19,6 +18,7 @@ function parseUrl(): TFilterOptions {
   if (!window.location.search) return {};
   const parsedObject = qs.parse(window.location.search.substr(1));
   let paresedFilterOptions = {};
+  console.log(parsedObject, "parsedObject");
   if (parsedObject.price) {
     if (!Array.isArray(parsedObject.price))
       throw new Error("parsed filter opton PRICE should be array");
@@ -49,12 +49,18 @@ function parseUrl(): TFilterOptions {
       brand: parsedObject.brand,
     };
   }
+  if (parsedObject.query) {
+    paresedFilterOptions = {
+      ...paresedFilterOptions,
+      query: parsedObject.query,
+    };
+  }
   return paresedFilterOptions;
 }
 
 function checkIsFilterOptions(filterOptions: TFilterOptions): boolean {
-  const { category, brand, price, stock } = filterOptions;
-  if (category || brand || price || stock) {
+  const { category, brand, price, stock, query } = filterOptions;
+  if (category || brand || price || stock || query) {
     return true;
   }
   return false;
@@ -86,6 +92,7 @@ function FilterContextProvider({ children }: { children: React.ReactNode }) {
     filterOptions.brand,
     filterOptions.price,
     filterOptions.stock,
+    filterOptions.query,
     isFilterOptionsExist,
   ]);
 

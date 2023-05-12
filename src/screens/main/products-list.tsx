@@ -7,12 +7,21 @@ import { FaSistrix } from "react-icons/fa";
 import { useDebouncedState } from "@react-hookz/web";
 import ProductCard from "../../components/productCard";
 import { useEffect, useState } from "react";
+import { useFilterContext } from "../../context/filter-contex";
 
 function SearchProductsInput() {
   // TODO : add Value in filterOptions
-  const [queryValue, setQueryValue] = useDebouncedState("", 500);
+  // setfilteroption, setQueryVlaue,
+  const { filterOptions, setFilterOptions } = useFilterContext();
+  function checkQuery() {
+    if (filterOptions.query) {
+      return filterOptions.query;
+    }
+    return "";
+  }
+  const [queryValue, setQueryValue] = useDebouncedState(checkQuery, 500);
   const { doFetch, isLoading } = useProductsContext();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(checkQuery);
 
   useEffect(() => {
     if (queryValue) {
@@ -25,6 +34,7 @@ function SearchProductsInput() {
   function setValueOne(e: string) {
     setQueryValue(e);
     setValue(e);
+    setFilterOptions({ ...filterOptions, query: e });
   }
   return (
     <>

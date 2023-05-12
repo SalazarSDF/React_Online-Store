@@ -1,39 +1,30 @@
 import { TProductItem } from "./types";
 import { TFilterOptions } from "./types";
 
-// function findMinMaxPrice(products: TProductItem[]): {
-//   totalMinMaxPrice: [number, number];
-//   totalMinMaxStock: [number, number];
-// } {
-//   const totalMinPrice = products.reduce(
-//     (min, el) => (el.price < min ? el.price : min),
-//     Infinity
-//   );
-//   const totalMaxPrice = products.reduce(
-//     (max, el) => (el.price > max ? el.price : max),
-//     0
-//   );
-
-//   const totalMinStock = products.reduce(
-//     (min, el) => (el.stock < min ? el.stock : min),
-//     Infinity
-//   );
-//   const totalMaxStock = products.reduce(
-//     (max, el) => (el.stock > max ? el.stock : max),
-//     0
-//   );
-
-//   return {
-//     totalMinMaxPrice: [totalMinPrice, totalMaxPrice],
-//     totalMinMaxStock: [totalMinStock, totalMaxStock],
-//   };
-// }
+function sortProducts(
+  sortBy: string,
+  products: TProductItem[]
+): TProductItem[] {
+  if (sortBy === "MIN price") {
+    return products.sort((a, b) => a.price - b.price);
+  } else if (sortBy === "MAX price") {
+    return products.sort((a, b) => b.price - a.price);
+  } else if (sortBy === "MIN stock") {
+    return products.sort((a, b) => a.stock - b.stock);
+  } else if (sortBy === "MAX stock") {
+    return products.sort((a, b) => b.stock - a.stock);
+  } else {
+    throw new Error(
+      'sortBy should be = "MIN price" | "MAX price" | "MIN stock" | "MAX stock"'
+    );
+  }
+}
 
 function filterProducts(
   products: TProductItem[],
   filterOptions: TFilterOptions
 ) {
-  const { category, brand, price, stock } = filterOptions;
+  const { category, brand, price, stock, sortBy } = filterOptions;
   let filteredProducts = [...products];
   if (category && category.length !== 0) {
     filteredProducts = filteredProducts.filter((product) =>
@@ -57,6 +48,10 @@ function filterProducts(
       (product) => product.stock >= minStock && product.stock <= maxStock
     );
   }
+  if (sortBy) {
+    filteredProducts = sortProducts(sortBy, products);
+  }
+
   return filteredProducts;
 }
 export { filterProducts };

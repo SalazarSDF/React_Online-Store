@@ -1,8 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Main } from "./screens/main/main-screen";
 import { Header } from "./components/header";
-//import { ProductScreen } from "./screens/product/product-screen";
-import { Cart } from "./screens/cart/Cart";
+import { Cart } from "./screens/cart/cart-screen";
 
 function App() {
   //<Route path="product/:productId" element={<ProductScreen />} />

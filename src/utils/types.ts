@@ -25,4 +25,5 @@ export type TFilterOptions = {
   price?: [number, number];
   stock?: [number, number];
   query?: string;
+  sortBy?: string;
 };

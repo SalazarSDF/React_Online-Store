@@ -1,55 +1,27 @@
 /** @jsxImportSource @emotion/react */
 import { useProductsContext } from "../../context/products-context";
 import { TProductItem } from "../../utils/types";
-import { Text, Loader, TextInput } from "@mantine/core";
-import { FaSistrix } from "react-icons/fa";
-//import { useDebouncedState } from "@mantine/hooks";
-import { useDebouncedState } from "@react-hookz/web";
+import { Loader } from "@mantine/core";
 import ProductCard from "../../components/productCard";
-import { useEffect, useState } from "react";
+import SearchProductsInput from "../product/search-products-input";
+//import { useDebouncedState } from "@mantine/hooks";
+import { NativeSelect } from "@mantine/core";
 import { useFilterContext } from "../../context/filter-contex";
 
-function SearchProductsInput() {
-  // TODO : add Value in filterOptions
-  // setfilteroption, setQueryVlaue,
+function SortOptionsSelect() {
+  const label = <label css={{ color: "white" }}>Sort Products Options:</label>;
   const { filterOptions, setFilterOptions } = useFilterContext();
-  function checkQuery() {
-    if (filterOptions.query) {
-      return filterOptions.query;
-    }
-    return "";
+  function handleOnChange(e: string) {
+    console.log(e);
+    setFilterOptions({ ...filterOptions, sortBy: e });
   }
-  const [queryValue, setQueryValue] = useDebouncedState(checkQuery, 500);
-  const { doFetch, isLoading } = useProductsContext();
-  const [value, setValue] = useState(checkQuery);
 
-  useEffect(() => {
-    if (queryValue) {
-      doFetch(`https://dummyjson.com/products/search?q=${queryValue}`);
-    } else {
-      doFetch("https://dummyjson.com/products?limit=0");
-    }
-  }, [queryValue]);
-
-  function setValueOne(e: string) {
-    setQueryValue(e);
-    setValue(e);
-    setFilterOptions({ ...filterOptions, query: e });
-  }
   return (
-    <>
-      <TextInput
-        placeholder="Search"
-        icon={<FaSistrix />}
-        rightSection={isLoading ? <Loader size="xs" /> : false}
-        value={value}
-        onChange={(e) => {
-          setValueOne(e.target.value);
-        }}
-      />
-
-      <Text>Debounced value: {queryValue}</Text>
-    </>
+    <NativeSelect
+      label={label}
+      data={["MIN price", "MAX price", "MIN stock", "MAX stock"]}
+      onChange={(event) => handleOnChange(event.currentTarget.value)}
+    />
   );
 }
 
@@ -61,7 +33,18 @@ export default function ProductsList({
   const { isLoading } = useProductsContext();
   return (
     <div css={{ padding: 20 }}>
-      <SearchProductsInput />
+      <div
+        css={{
+          display: "flex",
+          marginBottom: 20,
+          borderRadius: 20,
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <SearchProductsInput />
+        <SortOptionsSelect />
+      </div>
       {isLoading ? (
         <div
           css={{

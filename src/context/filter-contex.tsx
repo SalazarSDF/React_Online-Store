@@ -55,12 +55,18 @@ function parseUrl(): TFilterOptions {
       query: parsedObject.query,
     };
   }
+  if (parsedObject.sortBy) {
+    paresedFilterOptions = {
+      ...paresedFilterOptions,
+      sortBy: parsedObject.sortBy,
+    };
+  }
   return paresedFilterOptions;
 }
 
 function checkIsFilterOptions(filterOptions: TFilterOptions): boolean {
-  const { category, brand, price, stock, query } = filterOptions;
-  if (category || brand || price || stock || query) {
+  const { category, brand, price, stock, query, sortBy } = filterOptions;
+  if (category || brand || price || stock || query || sortBy) {
     return true;
   }
   return false;
@@ -93,6 +99,7 @@ function FilterContextProvider({ children }: { children: React.ReactNode }) {
     filterOptions.price,
     filterOptions.stock,
     filterOptions.query,
+    filterOptions.sortBy,
     isFilterOptionsExist,
   ]);
 

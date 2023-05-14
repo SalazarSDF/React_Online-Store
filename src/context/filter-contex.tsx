@@ -87,9 +87,6 @@ function FilterContextProvider({ children }: { children: React.ReactNode }) {
       const queryString = qs.stringify(filterOptions);
       navigate(`?${queryString}`);
     }
-    if (!isFilterOptionsExist) {
-      navigate("");
-    }
   }
   useEffect(() => {
     setFiltersInUrl();

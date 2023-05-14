@@ -49,7 +49,7 @@ function filterProducts(
     );
   }
   if (sortBy) {
-    filteredProducts = sortProducts(sortBy, products);
+    filteredProducts = sortProducts(sortBy, filteredProducts);
   }
 
   return filteredProducts;

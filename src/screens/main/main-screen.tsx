@@ -7,13 +7,10 @@ import { filterProducts } from "../../utils/filters";
 
 function Main() {
   const { allProducts } = useProductsContext();
-  const { filterOptions, isFilterOptionsExist } = useFilterContext();
+  const { filterOptions } = useFilterContext();
 
   console.time("filter array");
-  let filteredAndSortProducts = allProducts;
-  if (isFilterOptionsExist) {
-    filteredAndSortProducts = filterProducts(allProducts, filterOptions);
-  }
+  const filteredAndSortProducts = filterProducts(allProducts, filterOptions);
   console.timeEnd("filter array");
   //filteredAndSortProducts = [...allProducts.sort((a, b) => a.price - b.price)];
 

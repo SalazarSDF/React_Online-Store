@@ -12,7 +12,6 @@ function SortOptionsSelect() {
   const label = <label css={{ color: "white" }}>Sort Products Options:</label>;
   const { filterOptions, setFilterOptions } = useFilterContext();
   function handleOnChange(e: string) {
-    console.log(e);
     setFilterOptions({ ...filterOptions, sortBy: e });
   }
 
@@ -43,6 +42,7 @@ export default function ProductsList({
         }}
       >
         <SearchProductsInput />
+        <span>Found: {products.length}</span>
         <SortOptionsSelect />
       </div>
       {isLoading ? (

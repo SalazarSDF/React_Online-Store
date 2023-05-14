@@ -39,9 +39,9 @@ function FilterByPrice() {
   ) : (
     <div
       css={{
-        border: "2px solid orange",
+        border: "2px solid #228be6",
         borderRadius: 10,
-        background: "darkblue",
+        background: "#242424",
         padding: 20,
         display: "flex",
         flexDirection: "column",
@@ -88,9 +88,9 @@ function FilterByStock() {
   return (
     <div
       css={{
-        border: "2px solid orange",
+        border: "2px solid #228be6",
         borderRadius: 10,
-        background: "darkblue",
+        background: "#242424",
         padding: 20,
         display: "flex",
         flexDirection: "column",
@@ -117,9 +117,8 @@ function FilterByStock() {
 }
 
 const categoryAndBrandCss = css({
-  border: "2px solid orange",
-  borderRadius: 10,
-  background: "darkblue",
+  border: "1px solid #228be6",
+  background: "#242424",
   padding: 20,
   display: "flex",
   flexDirection: "column",
@@ -201,7 +200,7 @@ function FilterOptions() {
         flexDirection: "column",
         gap: 20,
         padding: 20,
-        background: "yellow",
+        background: "white",
       }}
     >
       <CopyUrlButton />

@@ -7,7 +7,7 @@ function Logo() {
   return (
     <Link
       css={{
-        color: "white",
+        color: "#242424",
         textDecoration: "none",
       }}
       to="/"
@@ -38,13 +38,14 @@ function ShopCart() {
           cursor: "pointer",
         }}
       >
-        <CiShoppingCart css={{ width: 34, height: 34 }} />
+        <CiShoppingCart css={{ width: 34, height: 34, fill: "#242424" }} />
         <span
           css={{
             position: "absolute",
             fontSize: 10,
             fontWeight: "bold",
             right: 13,
+            color: "#242424",
           }}
         >
           {shopCartProducts.length}
@@ -62,8 +63,9 @@ function ShopCartTotal() {
   );
   return (
     <div css={{ borderRadius: 20, boreder: "2px solid orangered" }}>
-      <span css={{ color: "orangered" }}>Cart total: </span>
-      {cartTotalPrice}$
+      <span css={{ color: "#242424", fontWeight: "bold" }}>
+        Cart total: {cartTotalPrice}$
+      </span>
     </div>
   );
 }
@@ -73,7 +75,7 @@ function Header() {
     <>
       <nav
         css={{
-          backgroundColor: "darkblue",
+          backgroundColor: "white",
           display: "flex",
           justifyContent: "space-between",
           margin: "0 auto",

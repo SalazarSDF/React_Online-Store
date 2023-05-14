@@ -29,6 +29,14 @@ export default function ProductsList({
   products: TProductItem[];
 }) {
   const { isLoading } = useProductsContext();
+
+  const styleGrid = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    rowGap: 40,
+    columnGap: 20,
+  };
+
   return (
     <div css={{ padding: 20 }}>
       <div
@@ -57,14 +65,7 @@ export default function ProductsList({
       ) : products.length === 0 ? (
         <h1>Products Not Found =(</h1>
       ) : (
-        <div
-          css={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            rowGap: 40,
-            columnGap: 20,
-          }}
-        >
+        <div css={styleGrid}>
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

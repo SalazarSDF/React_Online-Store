@@ -7,8 +7,15 @@ import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
 import { TProductItem } from "../utils/types";
 
 export default function ProductCard({ product }: { product: TProductItem }) {
-  const { id, title, description, price, thumbnail, discountPercentage } =
-    product;
+  const {
+    id,
+    title,
+    description,
+    price,
+    thumbnail,
+    discountPercentage,
+    stock,
+  } = product;
   const { shopCartProducts, addProductToCart, removeProductFromCart } =
     useShopCartContext();
 
@@ -43,6 +50,9 @@ export default function ProductCard({ product }: { product: TProductItem }) {
           </Badge>
         </Group>
 
+        <Badge color="indigo" variant="filled">
+          Stock: {stock}
+        </Badge>
         <Text size="sm" color="dimmed">
           {description}
         </Text>

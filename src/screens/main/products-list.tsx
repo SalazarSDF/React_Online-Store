@@ -2,9 +2,8 @@
 import { useProductsContext } from "../../context/products-context";
 import { TProductItem } from "../../utils/types";
 import { Loader } from "@mantine/core";
-import ProductCard from "../../components/productCard";
+import ProductCard from "../../components/product-card";
 import SearchProductsInput from "../product/search-products-input";
-//import { useDebouncedState } from "@mantine/hooks";
 import { NativeSelect } from "@mantine/core";
 import { useFilterContext } from "../../context/filter-contex";
 

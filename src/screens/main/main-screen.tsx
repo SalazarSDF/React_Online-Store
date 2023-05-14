@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import ProductsList from "./products-list";
 import { useFilterContext } from "../../context/filter-contex";
-import { FilterOptions } from "../../components/filter-options";
+import { FilterOptions } from "./filter-options";
 import { useProductsContext } from "../../context/products-context";
 import { filterProducts } from "../../utils/filters";
 

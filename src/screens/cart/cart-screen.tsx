@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { useShopCartContext } from "../../context/cart-contex";
-import { TProductItem } from "../../utils/types";
-import { Image } from "@mantine/core";
+//import { TProductItem } from "../../utils/types";
+import { Image, Button } from "@mantine/core";
+import { TShopCartProductItem } from "../../utils/types";
 
 const gridStyle = {
   display: "grid",
@@ -15,10 +16,12 @@ function ShopCartProduct({
   product,
   position,
 }: {
-  product: TProductItem;
+  product: TShopCartProductItem;
   position: number;
 }) {
-  const { title, price, stock, brand, thumbnail, images } = product;
+  const { title, price, stock, brand, thumbnail, quantity } = product;
+  const { increaseProductQuatity, decreseProductQuatity } =
+    useShopCartContext();
   return (
     <div css={gridStyle}>
       <span>{position}</span>
@@ -32,13 +35,51 @@ function ShopCartProduct({
       />
       <span>{title}</span>
       <span>{brand}</span>
-      <div>
-        <button>remove - </button>
-        <span>0</span>
-        <button>add + </button>
+      <div css={{ display: "flex", justifyContent: "space-between" }}>
+        <Button
+          onClick={() => decreseProductQuatity(product)}
+          radius="xl"
+          size="xs"
+          compact
+          color="cyan"
+        >
+          -
+        </Button>
+        <span>{quantity}</span>
+        <Button
+          onClick={() => increaseProductQuatity(product)}
+          radius="xl"
+          size="xs"
+          compact
+          color="cyan"
+        >
+          +
+        </Button>
       </div>
       <span>{stock}</span>
       <span>{price}</span>
+    </div>
+  );
+}
+
+function Summary() {
+  const { countPrice, countProducts } = useShopCartContext();
+  return (
+    <div
+      css={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 20,
+        padding: "20px 0",
+        border: "1px solid",
+      }}
+    >
+      <span css={{ borderBottom: "1px solid" }}>SUMMARY</span>
+      <span>Products: {countProducts()}</span>
+      <span>Total: {countPrice()} $</span>
+      <input type="text" placeholder="Enter promo code" />
+      <Button>BUY NOW</Button>
     </div>
   );
 }
@@ -50,13 +91,14 @@ function Cart() {
       css={{
         display: "grid",
         gridTemplateColumns: "2fr 1fr",
+        padding: "0 30px",
       }}
     >
       {shopCartProducts.length ? (
         <div css={{ display: "flex", flexDirection: "column" }}>
           <div css={gridStyle}>
             <span>#</span>
-            <span>product</span>
+            <span css={{ justifySelf: "center" }}>product</span>
             <span>title</span>
             <span>brand</span>
             <span>quantity</span>
@@ -70,6 +112,7 @@ function Cart() {
       ) : (
         <h1>NOTHING IN CART</h1>
       )}
+      <Summary></Summary>
     </div>
   );
 }

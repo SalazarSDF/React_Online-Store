@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useShopCartContext } from "../context/cart-contex";
 import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
 import { TProductItem } from "../utils/types";
+import debounce from "lodash.debounce";
 
 export default function ProductCard({ product }: { product: TProductItem }) {
   const {
@@ -26,11 +27,13 @@ export default function ProductCard({ product }: { product: TProductItem }) {
   function addRemoveProduct() {
     if (inCart) {
       setInCart(false);
-      removeProductFromCart(product);
+      const debRemove = () => removeProductFromCart(product);
+      debounce(debRemove, 200)();
     }
     if (!inCart) {
       setInCart(true);
-      addProductToCart(product);
+      const debAdd = () => addProductToCart(product);
+      debounce(debAdd, 200)();
     }
   }
 

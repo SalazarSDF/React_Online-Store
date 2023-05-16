@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { CiShoppingCart } from "react-icons/ci";
 import { useShopCartContext } from "../context/cart-contex";
+
 function Logo() {
   return (
     <Link
@@ -18,7 +19,7 @@ function Logo() {
 }
 
 function ShopCart() {
-  const { shopCartProducts } = useShopCartContext();
+  const { countProducts } = useShopCartContext();
   return (
     <Link
       css={{
@@ -48,7 +49,7 @@ function ShopCart() {
             color: "#242424",
           }}
         >
-          {shopCartProducts.length}
+          {countProducts()}
         </span>
       </div>
     </Link>
@@ -56,11 +57,8 @@ function ShopCart() {
 }
 
 function ShopCartTotal() {
-  const { shopCartProducts } = useShopCartContext();
-  const cartTotalPrice = shopCartProducts.reduce(
-    (sum, scp) => (sum = sum + scp.price),
-    0
-  );
+  const { countPrice } = useShopCartContext();
+  const cartTotalPrice = countPrice();
   return (
     <div css={{ borderRadius: 20, boreder: "2px solid orangered" }}>
       <span css={{ color: "#242424", fontWeight: "bold" }}>

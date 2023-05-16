@@ -13,6 +13,9 @@ function sortProducts(
     return products.sort((a, b) => a.stock - b.stock);
   } else if (sortBy === "MAX stock") {
     return products.sort((a, b) => b.stock - a.stock);
+  } else if (sortBy === "nosort") {
+    //sortMinPrice
+    return products.sort((a, b) => a.price - b.price);
   } else {
     throw new Error(
       'sortBy should be = "MIN price" | "MAX price" | "MIN stock" | "MAX stock"'
@@ -50,6 +53,9 @@ function filterProducts(
   }
   if (sortBy) {
     filteredProducts = sortProducts(sortBy, filteredProducts);
+  }
+  if (!sortBy) {
+    filteredProducts = sortProducts("nosort", filteredProducts);
   }
 
   return filteredProducts;

@@ -1,72 +1,144 @@
+/** @jsxImportSource @emotion/react */
 import { useParams } from "react-router-dom";
-//
-//import { useProductItem } from "../../utils/useProductsItems";
-import { Card, Group, Text, Image, SimpleGrid } from "@mantine/core";
+import { useProductsContext } from "../../context/products-context";
+//import { Card, Group, Text, Image, SimpleGrid } from "@mantine/core";
+import { Image, Button } from "@mantine/core";
+import { useState } from "react";
+import { useShopCartContext } from "../../context/cart-contex";
 
-function ProductScreen() {
-  const { productId } = useParams();
+export default function ProductScreen() {
+  let { productId } = useParams();
   if (!productId) {
-    return <h1>Loading...</h1>;
+    productId = "0";
   }
-  const { product, isFetching } = useProductItem(productId);
+  const { allProducts, isLoading } = useProductsContext();
+  const [currentImg, setCurrentImg] = useState("");
+  const { addProductToCart, removeProductFromCart } = useShopCartContext();
+  const [inCart, setInCart] = useState(() =>
+    allProducts.some((el) => el.id === Number(productId))
+  );
+  console.log(isLoading, "allProducts");
+  if (!productId || isLoading || allProducts.length === 0)
+    return <h1>Loading...</h1>;
+  const product = allProducts.filter((el) => el.id === Number(productId))[0];
   const {
-    title,
-    images,
-    thumbnail: image,
-    description,
-    discountPercentage,
-    rating,
-    stock,
     brand,
     category,
+    description,
+    images,
+    discountPercentage,
+    price,
+    rating,
+    stock,
+    title,
   } = product;
+  function addRemoveProduct() {
+    if (inCart) {
+      setInCart(!inCart);
+      removeProductFromCart(product);
+    } else {
+      setInCart(!inCart);
+      addProductToCart(product);
+    }
+  }
+
+  //if (!product) return <h1>Loading...</h1>;
+
   return (
-    <Card withBorder shadow="sm" radius="md">
-      <Card.Section withBorder inheritPadding py="xs">
-        <Group position="apart">
-          <Text weight={500}>{title}</Text>
-        </Group>
-      </Card.Section>
+    <>
+      <div
+        css={{
+          display: "grid",
+          justifyItems: "center",
 
-      <Group position="apart">
-        <Text mt="sm" color="dimmed" size="sm">
-          Description: {description}
-        </Text>
+          background: "rgb(0 0 0 / 15%)",
+        }}
+      >
+        <h1 css={{ borderBottom: "1px solid white" }}>{title}</h1>
+        <div
+          css={{
+            display: "grid",
+            gridTemplateColumns: "2fr 1fr 1fr",
+            padding: 20,
+            gap: 20,
+          }}
+        >
+          <div
+            css={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 35,
+              borderLeft: "1px solid white",
+              borderRight: "1px solid white",
+              padding: 20,
+            }}
+          >
+            <Image
+              width={350}
+              height={250}
+              src={currentImg === "" ? images[0] : currentImg}
+              css={{
+                outline: "1px solid white",
+                outlineOffset: 5,
+              }}
+            ></Image>
+            <div
+              css={{
+                display: "flex",
+                gap: 15,
+              }}
+            >
+              {images.map((el) => (
+                <Image
+                  width={100}
+                  height={50}
+                  onClick={() => setCurrentImg(el)}
+                  css={{
+                    outlineOffset: 5,
+                    ":hover": {
+                      cursor: " pointer",
+                      outline: "1px solid white",
+                      transform: "scale(1.05) translateY(-5px)",
+                    },
+                  }}
+                  key={el}
+                  src={el}
+                ></Image>
+              ))}
+            </div>
+          </div>
+          <div
+            css={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <p>Description: {description}</p>
+            <p>Discount Percentage: {discountPercentage}</p>
+            <p>Rating: {rating}</p>
+            <p>Stock: {stock}</p>
+            <p>Brand: {brand}</p>
+            <p>Category: {category}</p>
+          </div>
+          <div
+            css={{
+              display: "flex",
+              alignItems: "center",
+              gap: 40,
+              flexDirection: "column",
 
-        <Text mt="sm" color="dimmed" size="sm">
-          Discount: {discountPercentage}%
-        </Text>
-
-        <Text mt="sm" color="dimmed" size="sm">
-          Rating: {rating}
-        </Text>
-
-        <Text mt="sm" color="dimmed" size="sm">
-          Stock: {stock}
-        </Text>
-
-        <Text mt="sm" color="dimmed" size="sm">
-          Brand: {brand}
-        </Text>
-
-        <Text mt="sm" color="dimmed" size="sm">
-          Category: {category}
-        </Text>
-      </Group>
-
-      <Card.Section mt="sm">
-        <Image src={image} />
-      </Card.Section>
-
-      <Card.Section inheritPadding mt="sm" pb="md">
-        <SimpleGrid cols={3}>
-          {images.map((image, index) => (
-            <Image src={image} key={`${image}${index}`} radius="sm" />
-          ))}
-        </SimpleGrid>
-      </Card.Section>
-    </Card>
+              borderLeft: "1px solid white",
+              borderRight: "1px solid white",
+            }}
+          >
+            <span css={{ fontSize: 30 }}>Price: {price} $</span>
+            <Button onClick={() => addRemoveProduct()}>
+              {inCart ? "Remove From Cart" : "Add To Cart"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
-
-//export { ProductScreen };

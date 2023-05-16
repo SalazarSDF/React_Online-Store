@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { useProductsContext } from "../../context/products-context";
 import { TProductItem } from "../../utils/types";
-import { Loader } from "@mantine/core";
+import { Loader, NativeSelect } from "@mantine/core";
 import ProductCard from "../../components/product-card";
 import SearchProductsInput from "../product/search-products-input";
-import { NativeSelect } from "@mantine/core";
 import { useFilterContext } from "../../context/filter-contex";
 
 function SortOptionsSelect() {

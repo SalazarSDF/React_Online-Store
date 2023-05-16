@@ -28,12 +28,14 @@ export default function ProductCard({ product }: { product: TProductItem }) {
     if (inCart) {
       setInCart(false);
       const debRemove = () => removeProductFromCart(product);
-      debounce(debRemove, 200)();
+      //debounce(debRemove, 200)();
+      debRemove();
     }
     if (!inCart) {
       setInCart(true);
       const debAdd = () => addProductToCart(product);
-      debounce(debAdd, 200)();
+      //debounce(debAdd, 200)();
+      debAdd();
     }
   }
 

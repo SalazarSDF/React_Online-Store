@@ -1,14 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
-import { RangeSlider, Loader, MultiSelect } from "@mantine/core";
+import { RangeSlider, MultiSelect } from "@mantine/core";
 import { css } from "@emotion/react";
 import { brandsData, categoryData } from "../../utils/brands-category-data";
 import { useFilterContext } from "../../context/filter-contex";
 import { useProductsContext } from "../../context/products-context";
 import { Button } from "@mantine/core";
 import CopyUrlButton from "../../components/copy-url-button";
-
-import debounce from "lodash.debounce";
 
 function FilterByPrice() {
   const { filterOptions, setFilterOptions } = useFilterContext();
@@ -30,22 +28,20 @@ function FilterByPrice() {
           ...filterOptions,
           price: [newPrice[0], newPrice[1]],
         });
-      debounce(setNewFilterOptions, 1000)();
+      setNewFilterOptions();
     }
   };
 
-  return isLoading ? (
-    <Loader />
-  ) : (
+  return (
     <div
       css={{
-        border: "2px solid #228be6",
-        borderRadius: 10,
         background: "#242424",
         padding: 20,
         display: "flex",
         flexDirection: "column",
         gap: 20,
+        outline: "1px solid black",
+        outlineOffset: 5,
       }}
     >
       <span
@@ -88,13 +84,13 @@ function FilterByStock() {
   return (
     <div
       css={{
-        border: "2px solid #228be6",
-        borderRadius: 10,
         background: "#242424",
         padding: 20,
         display: "flex",
         flexDirection: "column",
         gap: 20,
+        outline: "1px solid black",
+        outlineOffset: 5,
       }}
     >
       <span
@@ -117,12 +113,13 @@ function FilterByStock() {
 }
 
 const categoryAndBrandCss = css({
-  border: "1px solid #228be6",
   background: "#242424",
   padding: 20,
   display: "flex",
   flexDirection: "column",
   gap: 20,
+  outline: "1px solid black",
+  outlineOffset: 5,
 });
 
 function FilterByCategory() {
@@ -188,7 +185,6 @@ function FilterByBrand() {
 
 function ClearFilterOptions() {
   const { setFilterOptions } = useFilterContext();
-
   return <Button onClick={() => setFilterOptions({})}>Clear Filters</Button>;
 }
 
@@ -203,8 +199,17 @@ function FilterOptions() {
         background: "white",
       }}
     >
-      <CopyUrlButton />
-      <ClearFilterOptions />
+      <div
+        css={{
+          display: "flex",
+          outline: "1px solid black",
+          outlineOffset: 5,
+          justifyContent: "space-between",
+        }}
+      >
+        <CopyUrlButton />
+        <ClearFilterOptions />
+      </div>
       <FilterByPrice />
       <FilterByCategory />
       <FilterByBrand />

@@ -3,21 +3,16 @@ import { useParams } from "react-router-dom";
 import { useProductsContext } from "../../context/products-context";
 //import { Card, Group, Text, Image, SimpleGrid } from "@mantine/core";
 import { Image, Button } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useShopCartContext } from "../../context/cart-contex";
 
 export default function ProductScreen() {
   let { productId } = useParams();
-  if (!productId) {
-    productId = "0";
-  }
   const { allProducts, isLoading } = useProductsContext();
   const [currentImg, setCurrentImg] = useState("");
-  const { addProductToCart, removeProductFromCart } = useShopCartContext();
-  const [inCart, setInCart] = useState(() =>
-    allProducts.some((el) => el.id === Number(productId))
-  );
-  console.log(isLoading, "allProducts");
+  const { shopCartProducts, addProductToCart, removeProductFromCart } =
+    useShopCartContext();
+  const [inCart, setInCart] = useState(false);
   if (!productId || isLoading || allProducts.length === 0)
     return <h1>Loading...</h1>;
   const product = allProducts.filter((el) => el.id === Number(productId))[0];
@@ -32,11 +27,21 @@ export default function ProductScreen() {
     stock,
     title,
   } = product;
+
+  useEffect(() => {
+    if (productId && allProducts.length) {
+      const isInCart = shopCartProducts.some(
+        (el) => el.id === Number(productId)
+      );
+      setInCart(isInCart);
+    }
+  }, [allProducts.length]);
   function addRemoveProduct() {
     if (inCart) {
       setInCart(!inCart);
       removeProductFromCart(product);
-    } else {
+    }
+    if (!inCart) {
       setInCart(!inCart);
       addProductToCart(product);
     }
@@ -134,7 +139,7 @@ export default function ProductScreen() {
           >
             <span css={{ fontSize: 30 }}>Price: {price} $</span>
             <Button onClick={() => addRemoveProduct()}>
-              {inCart ? "Remove From Cart" : "Add To Cart"}
+              {!inCart ? "Add To Cart" : "Remove From Cart"}
             </Button>
           </div>
         </div>

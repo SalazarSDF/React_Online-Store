@@ -73,6 +73,10 @@ function Summary() {
         gap: 20,
         padding: "20px 0",
         border: "1px solid",
+        height: 204,
+        position: "fixed",
+        right: 0,
+        width: 450,
       }}
     >
       <span css={{ borderBottom: "1px solid" }}>SUMMARY</span>
@@ -90,7 +94,7 @@ function Cart() {
     <div
       css={{
         display: "grid",
-        gridTemplateColumns: "2fr 1fr",
+        gridTemplateColumns: "2fr 500px",
         padding: "0 30px",
       }}
     >

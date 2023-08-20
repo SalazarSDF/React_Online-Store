@@ -20,19 +20,15 @@ export default function ProductCard({ product }: { product: TProductItem }) {
   const { shopCartProducts, addProductToCart, removeProductFromCart } =
     useShopCartContext();
 
-  const [inCart, setInCart] = useState(() => {
-    return shopCartProducts.some((el) => el.id === product.id);
-  });
+  const inCart = shopCartProducts.some((el) => el.id === product.id);
 
   function addRemoveProduct() {
     if (inCart) {
-      setInCart(false);
       const debRemove = () => removeProductFromCart(product);
       //debounce(debRemove, 200)();
       debRemove();
     }
     if (!inCart) {
-      setInCart(true);
       const debAdd = () => addProductToCart(product);
       //debounce(debAdd, 200)();
       debAdd();
